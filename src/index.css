@@ -1,0 +1,702 @@
+@import url("https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Amiri", Georgia, Cambria, "Times New Roman", Times, serif;
+
+  --color-brand-50: #fefce8;
+  --color-brand-100: #fef9c3;
+  --color-brand-200: #fef08a;
+  --color-brand-300: #fde047;
+  --color-brand-400: #facc15;
+  --color-brand-500: #eab308;
+  --color-brand-600: #ca8a04;
+  --color-brand-700: #a16207;
+  --color-brand-800: #854d0e;
+  --color-brand-900: #713f12;
+  --color-brand-950: #422006;
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+
+  .glass-dark {
+    @apply bg-brand-950/80 backdrop-blur-lg border border-brand-800/50 shadow-2xl;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-brand-400;
+  }
+}
+
+body {
+  @apply font-sans antialiased bg-slate-50 text-slate-900;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Existing Animations */
+@keyframes softFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-16px);
+  }
+}
+
+@keyframes slowGlow {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.75;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes lineFlow {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(120%);
+    opacity: 0;
+  }
+}
+
+@keyframes cardReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(38px) scale(0.96);
+    filter: blur(6px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes shineMove {
+  0% {
+    transform: translateX(-140%);
+  }
+
+  100% {
+    transform: translateX(140%);
+  }
+}
+
+.trial-soft-float {
+  animation: softFloat 6s ease-in-out infinite;
+}
+
+.trial-slow-glow {
+  animation: slowGlow 4s ease-in-out infinite;
+}
+
+.trial-line-flow::after {
+  content: "";
+  position: absolute;
+  left: -1px;
+  top: 0;
+  width: 3px;
+  height: 90px;
+  border-radius: 999px;
+  background: linear-gradient(to bottom, transparent, #facc15, transparent);
+  animation: lineFlow 3.6s ease-in-out infinite;
+}
+
+.trial-card-reveal {
+  animation: cardReveal 0.9s ease-out both;
+}
+
+.trial-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.trial-shine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 45%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(250, 204, 21, 0.14),
+    transparent
+  );
+  transform: translateX(-140%);
+  animation: shineMove 4.5s ease-in-out infinite;
+}
+
+/* Country Chips */
+@keyframes floatChip {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.country-chip-wrap {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  top: 18px;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.float-chip {
+  position: relative;
+  border-radius: 999px;
+  border: 1px solid rgba(250, 204, 21, 0.22);
+  background: rgba(0, 0, 0, 0.76);
+  padding: 8px 10px;
+  color: #fde047;
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(18px);
+  animation: none;
+}
+
+/* 3D World Model Animations */
+@keyframes sphereFloat {
+  0%,
+  100% {
+    transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+  }
+
+  50% {
+    transform: translateY(-10px) rotateX(5deg) rotateY(-6deg);
+  }
+}
+
+@keyframes sphereSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbitSpin {
+  from {
+    transform: rotateX(68deg) rotateZ(0deg);
+  }
+
+  to {
+    transform: rotateX(68deg) rotateZ(360deg);
+  }
+}
+
+@keyframes orbitReverse {
+  from {
+    transform: rotateX(68deg) rotateZ(360deg);
+  }
+
+  to {
+    transform: rotateX(68deg) rotateZ(0deg);
+  }
+}
+
+@keyframes pulseDot {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.75;
+  }
+
+  50% {
+    transform: scale(1.45);
+    opacity: 0.18;
+  }
+}
+
+@keyframes gridDrift {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(1.03);
+  }
+
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes latMove {
+  0% {
+    transform: rotateX(58deg) rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateX(58deg) rotateZ(360deg);
+  }
+}
+
+@keyframes latMoveSmall {
+  0% {
+    transform: rotateX(75deg) scale(0.78) rotateZ(360deg);
+  }
+
+  100% {
+    transform: rotateX(75deg) scale(0.78) rotateZ(0deg);
+  }
+}
+
+@keyframes latMoveSoft {
+  0% {
+    transform: rotateX(35deg) scale(0.92) rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateX(35deg) scale(0.92) rotateZ(360deg);
+  }
+}
+
+@keyframes meridianMove {
+  0% {
+    transform: rotateY(58deg) rotateZ(0deg);
+  }
+
+  100% {
+    transform: rotateY(58deg) rotateZ(360deg);
+  }
+}
+
+@keyframes meridianMoveAlt {
+  0% {
+    transform: rotateY(75deg) rotateZ(28deg);
+  }
+
+  100% {
+    transform: rotateY(75deg) rotateZ(388deg);
+  }
+}
+
+/* World Model Base */
+.world-scene {
+  position: relative;
+  width: min(76vw, 270px) !important;
+  height: min(76vw, 270px) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.world-orbit {
+  position: absolute;
+  border-radius: 999px;
+  border: 1px solid rgba(250, 204, 21, 0.16);
+  box-shadow: 0 0 45px rgba(250, 204, 21, 0.07);
+}
+
+.world-orbit-one {
+  width: 94%;
+  height: 94%;
+  animation: orbitSpin 24s linear infinite;
+}
+
+.world-orbit-two {
+  width: 74%;
+  height: 74%;
+  animation: orbitReverse 32s linear infinite;
+}
+
+.world-orbit-three {
+  width: 108%;
+  height: 108%;
+  opacity: 0.55;
+  animation: orbitSpin 42s linear infinite;
+}
+
+.world-dot {
+  position: absolute;
+  z-index: 5;
+  width: 9px !important;
+  height: 9px !important;
+  border-radius: 999px;
+  background: #facc15;
+  box-shadow: 0 0 24px rgba(250, 204, 21, 0.95);
+  animation: pulseDot 3s ease-in-out infinite;
+}
+
+.dot-one {
+  left: 14%;
+  top: 28%;
+}
+
+.dot-two {
+  right: 12%;
+  top: 34%;
+  animation-delay: 0.5s;
+}
+
+.dot-three {
+  left: 25%;
+  bottom: 18%;
+  animation-delay: 1s;
+}
+
+.dot-four {
+  right: 23%;
+  bottom: 18%;
+  animation-delay: 1.5s;
+}
+
+.dot-five {
+  left: 48%;
+  top: 8%;
+  animation-delay: 2s;
+}
+
+.world-sphere {
+  position: relative;
+  z-index: 10;
+  width: 62% !important;
+  height: 62% !important;
+  border-radius: 999px;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 32% 25%,
+      rgba(254, 240, 138, 0.78),
+      rgba(250, 204, 21, 0.18) 20%,
+      transparent 31%
+    ),
+    radial-gradient(
+      circle at 65% 70%,
+      rgba(250, 204, 21, 0.3),
+      transparent 34%
+    ),
+    radial-gradient(circle at 50% 50%, #141006 0%, #050505 58%, #000 100%);
+  border: 1px solid rgba(250, 204, 21, 0.38);
+  box-shadow:
+    inset -26px -24px 62px rgba(0, 0, 0, 0.95),
+    inset 18px 14px 55px rgba(250, 204, 21, 0.18),
+    0 0 60px rgba(250, 204, 21, 0.22),
+    0 0 110px rgba(250, 204, 21, 0.14);
+  animation: sphereFloat 7s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+.world-lines {
+  position: absolute;
+  inset: -20%;
+  opacity: 0.62;
+  background:
+    linear-gradient(90deg, rgba(250, 204, 21, 0.1) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(250, 204, 21, 0.08) 1px, transparent 1px),
+    radial-gradient(circle at 25% 35%, rgba(250, 204, 21, 0.4) 0 3px, transparent 4px),
+    radial-gradient(circle at 65% 42%, rgba(250, 204, 21, 0.32) 0 2px, transparent 3px),
+    radial-gradient(circle at 52% 70%, rgba(250, 204, 21, 0.28) 0 2px, transparent 3px);
+  background-size: 38px 38px, 38px 38px, 140px 140px, 170px 170px, 150px 150px;
+  animation: gridDrift 20s linear infinite;
+}
+
+.world-lat,
+.world-meridian {
+  position: absolute;
+  inset: 12%;
+  border-radius: 999px;
+  border: 1px solid rgba(250, 204, 21, 0.14);
+}
+
+.lat-one {
+  animation: latMove 14s linear infinite;
+}
+
+.lat-two {
+  animation: latMoveSmall 18s linear infinite;
+}
+
+.lat-three {
+  animation: latMoveSoft 22s linear infinite;
+}
+
+.meridian-one {
+  animation: meridianMove 16s linear infinite;
+}
+
+.meridian-two {
+  animation: meridianMoveAlt 20s linear infinite;
+}
+
+.world-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at 30% 22%,
+    rgba(255, 255, 255, 0.28),
+    transparent 25%
+  );
+  mix-blend-mode: screen;
+}
+
+.world-shadow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 72% 72%, rgba(0, 0, 0, 0.88), transparent 46%);
+}
+
+.world-center-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 20;
+  min-width: 112px !important;
+  transform: translate(-50%, -50%);
+  border-radius: 18px;
+  border: 1px solid rgba(250, 204, 21, 0.28);
+  background: rgba(250, 204, 21, 0.92);
+  padding: 10px 11px !important;
+  text-align: center;
+  color: #000;
+  box-shadow: 0 0 42px rgba(250, 204, 21, 0.24);
+  backdrop-filter: blur(18px);
+}
+
+.world-center-card p {
+  margin-top: 5px;
+  font-size: 11px !important;
+  font-weight: 900;
+}
+
+.world-center-card span {
+  margin-top: 2px;
+  display: block;
+  font-size: 7px !important;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Tablet / Desktop */
+@media (min-width: 640px) {
+  .world-scene {
+    width: min(84vw, 430px) !important;
+    height: min(84vw, 430px) !important;
+  }
+
+  .world-dot {
+    width: 14px !important;
+    height: 14px !important;
+  }
+
+  .world-sphere {
+    width: 64% !important;
+    height: 64% !important;
+  }
+
+  .world-center-card {
+    min-width: 165px !important;
+    padding: 16px 18px !important;
+    border-radius: 24px;
+  }
+
+  .world-center-card p {
+    margin-top: 8px;
+    font-size: 15px !important;
+  }
+
+  .world-center-card span {
+    margin-top: 3px;
+    font-size: 10px !important;
+    letter-spacing: 0.1em;
+  }
+}
+
+/* Desktop country floating chips */
+@media (min-width: 768px) {
+  .country-chip-wrap {
+    position: static;
+    display: block;
+  }
+
+  .float-chip {
+    position: absolute;
+    z-index: 35;
+    border-radius: 18px;
+    padding: 12px 16px;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.75);
+    animation: floatChip 6s ease-in-out infinite;
+  }
+
+  .chip-one {
+    left: 28px;
+    top: 110px;
+  }
+
+  .chip-two {
+    right: 30px;
+    top: 145px;
+    animation-delay: 0.7s;
+  }
+
+  .chip-three {
+    right: 52px;
+    bottom: 140px;
+    animation-delay: 1.3s;
+  }
+}
+
+/* Mobile final fix */
+@media (max-width: 640px) {
+  .world-scene {
+    width: min(78vw, 285px) !important;
+    height: min(78vw, 285px) !important;
+  }
+
+  .world-sphere {
+    width: 62% !important;
+    height: 62% !important;
+  }
+
+  .world-center-card {
+    min-width: 112px !important;
+    padding: 10px 11px !important;
+    border-radius: 18px;
+  }
+
+  .world-center-card svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  .world-center-card p {
+    font-size: 11px !important;
+    margin-top: 5px;
+  }
+
+  .world-center-card span {
+    font-size: 7px !important;
+    letter-spacing: 0.06em;
+  }
+
+  .world-dot {
+    width: 9px !important;
+    height: 9px !important;
+  }
+}
+
+/* FINAL MOBILE FIX: make yellow center card smaller than globe */
+@media (max-width: 640px) {
+  .world-scene {
+    width: min(78vw, 285px) !important;
+    height: min(78vw, 285px) !important;
+  }
+
+  .world-sphere {
+    width: 66% !important;
+    height: 66% !important;
+  }
+
+  .world-center-card {
+    min-width: 86px !important;
+    width: 86px !important;
+    max-width: 86px !important;
+    padding: 7px 8px !important;
+    border-radius: 14px !important;
+    transform: translate(-50%, -50%) scale(0.86) !important;
+  }
+
+  .world-center-card svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .world-center-card p {
+    margin-top: 3px !important;
+    font-size: 8.5px !important;
+    line-height: 1.1 !important;
+  }
+
+  .world-center-card span {
+    margin-top: 2px !important;
+    font-size: 5.5px !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0.04em !important;
+  }
+
+  .world-dot {
+    width: 8px !important;
+    height: 8px !important;
+  }
+
+  .world-orbit-one {
+    width: 94% !important;
+    height: 94% !important;
+  }
+
+  .world-orbit-two {
+    width: 76% !important;
+    height: 76% !important;
+  }
+
+  .world-orbit-three {
+    width: 108% !important;
+    height: 108% !important;
+  }
+}
+@media (min-width: 641px) {
+  .world-center-card {
+    min-width: 140px !important;
+    width: 140px !important;
+    max-width: 140px !important;
+    padding: 13px 14px !important;
+  }
+
+  .world-center-card svg {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .world-center-card p {
+    font-size: 13px !important;
+  }
+
+  .world-center-card span {
+    font-size: 8px !important;
+  }
+}

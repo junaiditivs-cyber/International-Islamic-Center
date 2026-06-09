@@ -1,0 +1,1 @@
+export const CREATOR_CREDIT = "Designed & Created by MJ KHAN";
