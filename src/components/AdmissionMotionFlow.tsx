@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import useInViewport from "./useInViewport";
 import {
   CalendarCheck,
   CheckCircle2,
@@ -57,14 +58,17 @@ const steps: StepItem[] = [
 
 export default function AdmissionMotionFlow() {
   const [active, setActive] = useState(0);
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const inView = useInViewport(rootRef);
 
   useEffect(() => {
+    if (!inView) return;
     const timer = window.setInterval(() => {
       setActive((prev) => (prev + 1) % steps.length);
     }, 1000);
 
     return () => window.clearInterval(timer);
-  }, []);
+  }, [inView]);
 
   const activeStep = useMemo(() => steps[active], [active]);
   const ActiveIcon = activeStep.icon;
@@ -127,7 +131,7 @@ export default function AdmissionMotionFlow() {
   };
 
   return (
-    <div className="relative overflow-hidden rounded-[52px] border border-yellow-400/25 bg-white/[0.045] p-6 shadow-[0_0_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl md:p-8">
+    <div ref={rootRef} className="relative overflow-hidden rounded-[52px] border border-yellow-400/25 bg-white/[0.045] p-6 shadow-[0_0_100px_rgba(0,0,0,0.45)] backdrop-blur-2xl md:p-8">
       <div className="mb-8">
         <div className="inline-flex items-center gap-2 rounded-full border border-yellow-400/25 bg-yellow-400/10 px-5 py-2 text-xs font-black uppercase tracking-[0.18em] text-yellow-300">
           <CalendarCheck className="h-4 w-4" />

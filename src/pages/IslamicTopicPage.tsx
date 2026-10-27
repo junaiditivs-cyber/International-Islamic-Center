@@ -20,21 +20,21 @@ const pillars: Pillar[] = [
     title: "Quran",
     desc: "Reading, Tajweed, Hifz, pronunciation, fluency and love for the Book of Allah.",
     icon: BookOpen,
-    image: "/images/topics/quran-bg.jpg",
+    image: "/images/topics/quran-main.webp",
   },
   {
     slug: "sunnah",
     title: "Sunnah",
     desc: "Daily duas, Islamic manners, kindness, respect, Prophet stories and beautiful character.",
     icon: ScrollText,
-    image: "/images/topics/sunnah-bg.jpg",
+    image: "/images/topics/sunnah-main.webp",
   },
   {
     slug: "salah",
     title: "Salah",
     desc: "Wudu, prayer positions, daily prayers, short Surahs and duas inside Salah.",
     icon: MoonStar,
-    image: "/images/topics/salah-bg.jpg",
+    image: "/images/topics/salah-main.webp",
   },
 ];
 

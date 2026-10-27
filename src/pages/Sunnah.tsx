@@ -5,7 +5,6 @@ import {
   BookOpen,
   CheckCircle2,
   ScrollText,
-  Sparkles,
   Star,
 } from "lucide-react";
 
@@ -75,8 +74,8 @@ export default function Sunnah() {
               <div className="pointer-events-none absolute -inset-8 rounded-[60px] bg-[radial-gradient(circle_at_center,rgba(250,204,21,0.22),transparent_62%)] blur-3xl" />
 
               <div className="relative overflow-hidden rounded-[52px] border border-yellow-400/30 bg-black/70 p-4 shadow-[0_0_120px_rgba(250,204,21,0.18)] backdrop-blur-2xl md:p-5">
-                <img
-                  src="/images/topics/sunnah-main.png"
+                <img decoding="async"
+                  src="/images/topics/sunnah-main.webp"
                   alt="Sunnah learning"
                   className="h-auto w-full rounded-[40px] object-contain shadow-[0_0_80px_rgba(0,0,0,0.85)]"
                 />

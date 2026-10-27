@@ -29,7 +29,7 @@ export const programs: Program[] = [
     title: "Quran Reading",
     subtitle:
       "Learn to read the Holy Quran with confidence, fluency and correct pronunciation.",
-    image: "/images/topics/quran-reading.png",
+    image: "/images/topics/quran-reading.webp",
     icon: BookOpen,
     link: "/topic/quran-reading",
     heroTitle: "Learn Quran Reading Online",
@@ -53,7 +53,7 @@ export const programs: Program[] = [
     title: "Tajweed Rules",
     subtitle:
       "Improve recitation with Makharij, Tajweed rules and teacher correction.",
-    image: "/images/topics/tajweed.png",
+    image: "/images/topics/tajweed.webp",
     icon: Sparkles,
     link: "/topic/tajweed-rules",
     heroTitle: "Master Tajweed Rules",
@@ -77,7 +77,7 @@ export const programs: Program[] = [
     title: "Hifz Quran",
     subtitle:
       "Memorize Quran with revision, discipline, daily targets and progress tracking.",
-    image: "/images/topics/hifz-quran.jpg",
+    image: "/images/topics/hifz-quran.webp",
     icon: BadgeCheck,
     link: "/topic/hifz-quran",
     heroTitle: "Online Hifz Quran Program",
@@ -101,7 +101,7 @@ export const programs: Program[] = [
     title: "How To Perform Namaz",
     subtitle:
       "Learn Wudu, Salah positions, duas in prayer and common prayer mistakes.",
-    image: "/images/topics/namaz.png",
+    image: "/images/topics/namaz.webp",
     icon: MoonStar,
     link: "/topic/how-to-perform-namaz",
     heroTitle: "Learn How To Perform Namaz",
@@ -125,7 +125,7 @@ export const programs: Program[] = [
     title: "Wudu",
     subtitle:
       "Learn purification, cleanliness and how to prepare properly for Salah.",
-    image: "/images/topics/wudu.png",
+    image: "/images/topics/wudu.webp",
     icon: Droplets,
     link: "/topic/wudu",
     heroTitle: "Learn Wudu Step By Step",
@@ -149,7 +149,7 @@ export const programs: Program[] = [
     title: "Daily Duas",
     subtitle:
       "Memorize duas for morning, evening, food, sleep, protection and parents.",
-    image: "/images/topics/duas.jpg",
+    image: "/images/topics/duas.webp",
     icon: HandHeart,
     link: "/topic/daily-duas",
     heroTitle: "Daily Duas For Every Muslim",
@@ -173,7 +173,7 @@ export const programs: Program[] = [
     title: "Akhlaq & Adab",
     subtitle:
       "Build Islamic manners, respect, kindness, honesty and good character.",
-    image: "/images/topics/manners.jpg",
+    image: "/images/topics/manners.webp",
     icon: HeartHandshake,
     link: "/topic/akhlaq-adab",
     heroTitle: "Islamic Manners And Good Character",
@@ -197,7 +197,7 @@ export const programs: Program[] = [
     title: "Islamic Studies",
     subtitle:
       "Learn Seerah, Prophets’ stories, beliefs, Salah basics and Islamic lifestyle.",
-    image: "/images/topics/islamic-studies.jpg",
+    image: "/images/topics/islamic-studies.webp",
     icon: ScrollText,
     link: "/topic/islamic-studies",
     heroTitle: "Islamic Studies For Kids And Adults",

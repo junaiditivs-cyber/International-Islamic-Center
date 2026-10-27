@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import {
   BookOpen,
   Heart,
@@ -164,7 +164,7 @@ export default function Courses() {
                 {/* IMAGE */}
                 <div className="relative h-72 overflow-hidden">
 
-                  <img
+                  <img decoding="async"
                     src={course.image}
                     alt={course.title}
                     className="
@@ -361,7 +361,7 @@ export default function Courses() {
               {/* IMAGE */}
               <div className="relative h-80">
 
-                <img
+                <img loading="lazy" decoding="async"
                   src={selectedCourse.image}
                   alt={selectedCourse.title}
                   className="w-full h-full object-cover"

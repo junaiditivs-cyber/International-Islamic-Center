@@ -13,8 +13,7 @@ export default function BrandLogo({ size = "navbar" }: BrandLogoProps) {
 
   const isNavbar = size === "navbar";
 
-  // Agar logo PNG hai to .jpg ki jagah .png kar dena.
-  const logoSrc = "/images/international-islamic-center-logo.jpg";
+  const logoSrc = "/images/international-islamic-center-logo-sm.webp";
 
   useEffect(() => {
     setMounted(true);
@@ -57,8 +56,10 @@ export default function BrandLogo({ size = "navbar" }: BrandLogoProps) {
 
                       <div className="relative flex h-[205px] w-[205px] items-center justify-center overflow-hidden rounded-[42px] border border-yellow-400/35 bg-white shadow-[0_0_90px_rgba(250,204,21,0.28)] sm:h-[285px] sm:w-[285px] lg:h-[340px] lg:w-[340px]">
                         <img
-                          src={logoSrc}
+                          src="/images/international-islamic-center-logo.webp"
                           alt="International Islamic Center Logo"
+                          width={340}
+                          height={340}
                           className="h-full w-full object-contain p-4"
                         />
                       </div>
@@ -70,10 +71,10 @@ export default function BrandLogo({ size = "navbar" }: BrandLogoProps) {
                       Premium Islamic Learning
                     </div>
 
-                    <h1 className="iic-title text-[34px] font-black tracking-tight sm:text-[50px] md:text-[70px] xl:text-[88px]">
+                    <h2 className="iic-title text-[34px] font-black tracking-tight sm:text-[50px] md:text-[70px] xl:text-[88px]">
                       <span className="iic-top-3d">INTERNATIONAL</span>
                       <span className="iic-bottom-3d">ISLAMIC CENTER</span>
-                    </h1>
+                    </h2>
 
                     <p className="iic-tagline mt-5 text-xs font-black uppercase tracking-[0.34em] text-yellow-400/90 md:text-sm">
                       Knowledge | Unity | Service
@@ -287,6 +288,8 @@ export default function BrandLogo({ size = "navbar" }: BrandLogoProps) {
             <img
               src={logoSrc}
               alt="International Islamic Center Logo"
+              width={isNavbar ? 64 : 80}
+              height={isNavbar ? 64 : 80}
               className={`h-full w-full ${
                 isNavbar ? "object-contain p-1" : "object-contain p-1.5"
               }`}
@@ -297,14 +300,14 @@ export default function BrandLogo({ size = "navbar" }: BrandLogoProps) {
         <div className="min-w-0 flex-1 leading-none">
           {isNavbar ? (
             <>
-              <h2 className="text-[16px] font-black leading-[0.96] sm:text-[19px] lg:text-[25px]">
+              <div className="text-[16px] font-black leading-[0.96] sm:text-[19px] lg:text-[25px]">
                 <span className="iic-navbar-white block whitespace-nowrap">
                   INTERNATIONAL
                 </span>
                 <span className="iic-navbar-gold block whitespace-nowrap">
                   ISLAMIC CENTER
                 </span>
-              </h2>
+              </div>
 
               <p className="mt-1 hidden text-[8px] font-black uppercase tracking-[0.2em] text-yellow-400/85 sm:block">
                 Knowledge | Unity | Service
@@ -312,10 +315,10 @@ export default function BrandLogo({ size = "navbar" }: BrandLogoProps) {
             </>
           ) : (
             <>
-              <h2 className="iic-title text-[28px] font-black tracking-tight md:text-[48px]">
+              <div className="iic-title text-[28px] font-black tracking-tight md:text-[48px]">
                 <span className="iic-top-3d">INTERNATIONAL</span>
                 <span className="iic-bottom-3d">ISLAMIC CENTER</span>
-              </h2>
+              </div>
 
               <p className="iic-tagline mt-1.5 text-[10px] font-black uppercase tracking-[0.22em] text-yellow-400/85 md:text-xs">
                 Knowledge | Unity | Service

@@ -5,11 +5,8 @@ import {
   BookOpen,
   CheckCircle2,
   HeartHandshake,
-  Home,
-  MoonStar,
   ScrollText,
   ShieldCheck,
-  Sparkles,
   Star,
   Users,
   type LucideIcon,
@@ -148,8 +145,8 @@ export default function Sunnah() {
                 <div className="pointer-events-none absolute bottom-7 right-7 z-20 h-14 w-14 border-b border-r border-yellow-400/45" />
 
                 <div className="relative overflow-hidden rounded-[44px] bg-black">
-                  <img
-                    src="/images/topics/sunnah-main.png"
+                  <img decoding="async"
+                    src="/images/topics/sunnah-main.webp"
                     alt="Sunnah learning"
                     className="h-auto w-full rounded-[44px] object-contain shadow-[0_0_80px_rgba(0,0,0,0.85)]"
                   />

@@ -93,5 +93,3 @@ export default function QuranModel() {
     </div>
   );
 }
-
-useGLTF.preload("/models/quran-book.glb");

@@ -418,7 +418,7 @@ export default function Footer() {
                   <div>
                     <p className="text-sm font-black text-white">Logo</p>
                     <a
-                      href="/images/international-islamic-center-logo.jpg"
+                      href="/images/international-islamic-center-logo.webp"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="mt-1 inline-flex text-sm font-bold text-yellow-400 transition hover:text-yellow-300"
@@ -441,7 +441,7 @@ export default function Footer() {
           {/* Bottom */}
           <div className="mt-9 border-t border-yellow-400/10 px-2 pt-6">
             <div className="flex flex-col gap-2 text-center md:flex-row md:items-center md:justify-between md:text-left">
-              <p className="text-sm text-zinc-500">
+              <p className="text-sm text-zinc-400">
                 © 2026 INTERNATIONAL ISLAMIC CENTER. All rights reserved.
               </p>
 

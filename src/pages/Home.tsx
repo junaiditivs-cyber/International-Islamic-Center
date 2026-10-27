@@ -19,19 +19,20 @@ import {
   Sun,
 
 } from "lucide-react";
-import QuranModel from "../components/QuranModel";
-import AdmissionMotionFlow from "../components/AdmissionMotionFlow";
-import QuranLearningPromise from "../components/QuranLearningPromise";
+import { lazy, Suspense } from "react";
+import RenderWhenVisible from "../components/RenderWhenVisible";
+const QuranModel = lazy(() => import("../components/QuranModel"));
+const AdmissionMotionFlow = lazy(() => import("../components/AdmissionMotionFlow"));
+const QuranLearningPromise = lazy(() => import("../components/QuranLearningPromise"));
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import ZoomOutOnScroll from "../components/ZoomOutOnScroll";
 import AnimatedStats from "../components/AnimatedStats";
-import GlobalParentMapReviews from "../components/GlobalParentMapReviews";
-import GlobalTrustGlobeCTA from "../components/GlobalTrustGlobeCTA";
+const GlobalParentMapReviews = lazy(() => import("../components/GlobalParentMapReviews"));
+const GlobalTrustGlobeCTA = lazy(() => import("../components/GlobalTrustGlobeCTA"));
 
 function HadithSplitBanner() {
   const bannerRef = useRef<HTMLDivElement | null>(null);
-  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     let ticking = false;
@@ -51,7 +52,9 @@ function HadithSplitBanner() {
       const rawProgress = (start - rect.top) / (start - end);
       const nextProgress = Math.min(Math.max(rawProgress, 0), 1);
 
-      setProgress(nextProgress);
+      // CSS variables update the visual without rerendering the entire homepage.
+      bannerRef.current.style.setProperty("--hadith-move", `${nextProgress * 38}%`);
+      bannerRef.current.style.setProperty("--hadith-opacity", String(Math.max(1 - nextProgress * 1.1, 0)));
     };
 
     const onScroll = () => {
@@ -65,24 +68,26 @@ function HadithSplitBanner() {
       }
     };
 
-    updateProgress();
+    // Defer initial layout calculation to prevent forced reflow during critical render path
+    const timer = setTimeout(() => {
+      window.requestAnimationFrame(updateProgress);
+    }, 250);
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", updateProgress);
+    window.addEventListener("resize", onScroll);
 
     return () => {
+      clearTimeout(timer);
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", updateProgress);
+      window.removeEventListener("resize", onScroll);
     };
   }, []);
-
-  const move = progress * 38;
-  const opacity = Math.max(1 - progress * 1.1, 0);
 
   return (
     <div
       ref={bannerRef}
-      className="relative mx-auto mb-16 w-full max-w-[1420px] overflow-hidden sm:mb-24"
+      style={{ "--hadith-move": "0%", "--hadith-opacity": "1" } as React.CSSProperties}
+      className="hadith-split relative mx-auto mb-16 w-full max-w-[1420px] overflow-hidden sm:mb-24"
     >
       {/* Soft glow outside only */}
       <div className="pointer-events-none absolute -inset-4 rounded-[34px] bg-[radial-gradient(circle_at_center,rgba(250,204,21,0.14),transparent_62%)] blur-2xl sm:-inset-8 sm:rounded-[56px] sm:blur-3xl" />
@@ -93,16 +98,13 @@ function HadithSplitBanner() {
         <div className="relative hidden aspect-[1672/941] w-full overflow-hidden bg-black md:block">
           {/* Left half */}
           <div
-            className="absolute inset-0 overflow-hidden will-change-transform"
-            style={{
-              clipPath: "inset(0 50% 0 0)",
-              transform: `translateX(-${move}%)`,
-              opacity,
-            }}
+            className="hadith-half hadith-left absolute inset-0 overflow-hidden"
           >
-            <img
-              src="/images/hadith-desktop.png"
+            <img loading="lazy" decoding="async"
+              src="/images/hadith-desktop.webp"
               alt="Quran learning hadith"
+              width={1672}
+              height={941}
               className="absolute inset-0 h-full w-full object-contain object-center"
               draggable={false}
             />
@@ -110,16 +112,13 @@ function HadithSplitBanner() {
 
           {/* Right half */}
           <div
-            className="absolute inset-0 overflow-hidden will-change-transform"
-            style={{
-              clipPath: "inset(0 0 0 50%)",
-              transform: `translateX(${move}%)`,
-              opacity,
-            }}
+            className="hadith-half hadith-right absolute inset-0 overflow-hidden"
           >
-            <img
-              src="/images/hadith-desktop.png"
+            <img loading="lazy" decoding="async"
+              src="/images/hadith-desktop.webp"
               alt=""
+              width={1672}
+              height={941}
               className="absolute inset-0 h-full w-full object-contain object-center"
               draggable={false}
             />
@@ -130,16 +129,13 @@ function HadithSplitBanner() {
         <div className="relative aspect-[941/1672] w-full overflow-hidden bg-black md:hidden">
           {/* Left half */}
           <div
-            className="absolute inset-0 overflow-hidden will-change-transform"
-            style={{
-              clipPath: "inset(0 50% 0 0)",
-              transform: `translateX(-${move}%)`,
-              opacity,
-            }}
+            className="hadith-half hadith-left absolute inset-0 overflow-hidden"
           >
-            <img
-              src="/images/hadith-mobile.png"
+            <img loading="lazy" decoding="async"
+              src="/images/hadith-mobile.webp"
               alt="Quran learning hadith"
+              width={440}
+              height={782}
               className="absolute inset-0 h-full w-full object-contain object-center"
               draggable={false}
             />
@@ -147,16 +143,13 @@ function HadithSplitBanner() {
 
           {/* Right half */}
           <div
-            className="absolute inset-0 overflow-hidden will-change-transform"
-            style={{
-              clipPath: "inset(0 0 0 50%)",
-              transform: `translateX(${move}%)`,
-              opacity,
-            }}
+            className="hadith-half hadith-right absolute inset-0 overflow-hidden"
           >
-            <img
-              src="/images/hadith-mobile.png"
+            <img loading="lazy" decoding="async"
+              src="/images/hadith-mobile.webp"
               alt=""
+              width={440}
+              height={782}
               className="absolute inset-0 h-full w-full object-contain object-center"
               draggable={false}
             />
@@ -175,7 +168,7 @@ export default function Home() {
       title: "Quran Reading",
       subtitle:
         "Learn to read the Holy Quran with confidence, fluency and correct pronunciation.",
-      image: "/images/topics/quran-reading.png",
+      image: "/images/topics/quran-reading.webp",
       icon: BookOpen,
      link: "/topic/quran-reading",
     },
@@ -183,7 +176,7 @@ export default function Home() {
       title: "Tajweed Rules",
       subtitle:
         "Improve recitation with Makharij, Tajweed rules and teacher correction.",
-      image: "/images/topics/tajweed.png",
+      image: "/images/topics/tajweed.webp",
       icon: Sparkles,
       link: "/topic/tajweed-rules",
     },
@@ -191,7 +184,7 @@ export default function Home() {
       title: "Hifz Quran",
       subtitle:
         "Memorize Quran with revision, discipline, daily targets and progress tracking.",
-      image: "/images/topics/hifz-quran.jpg",
+      image: "/images/topics/hifz-quran.webp",
       icon: BadgeCheck,
       link: "/topic/hifz-quran",
     },
@@ -199,7 +192,7 @@ export default function Home() {
       title: "How To Perform Namaz",
       subtitle:
         "Learn Wudu, Salah positions, duas in prayer and common prayer mistakes.",
-      image: "/images/topics/namaz.png",
+      image: "/images/topics/namaz.webp",
       icon: MoonStar,
       link: "/topic/how-to-perform-namaz",
     },
@@ -207,7 +200,7 @@ export default function Home() {
       title: "Wudu",
       subtitle:
         "Learn purification, cleanliness and how to prepare properly for Salah.",
-      image: "/images/topics/wudu.png",
+      image: "/images/topics/wudu.webp",
       icon: Droplets,
       link: "/topic/wudu",
     },
@@ -215,7 +208,7 @@ export default function Home() {
       title: "Daily Duas",
       subtitle:
         "Memorize duas for morning, evening, food, sleep, protection and parents.",
-      image: "/images/topics/duas.jpg",
+      image: "/images/topics/duas.webp",
       icon: HandHeart,
       link: "/topic/daily-duas",
     },
@@ -223,15 +216,15 @@ export default function Home() {
       title: "Akhlaq & Adab",
       subtitle:
         "Build Islamic manners, respect, kindness, honesty and good character.",
-      image: "/images/topics/manners.jpg",
+      image: "/images/topics/manners.webp",
       icon: HeartHandshake,
-      link: "/topic/akhlaq-and-adab",
+      link: "/topic/akhlaq-adab",
     },
     {
       title: "Islamic Studies",
       subtitle:
         "Learn Seerah, Prophets' stories, beliefs, Salah basics and Islamic lifestyle.",
-      image: "/images/topics/islamic-studies.jpg",
+      image: "/images/topics/islamic-studies.webp",
       icon: ScrollText,
       link: "/topic/islamic-studies",
     },
@@ -242,7 +235,7 @@ const learningPillars = [
     slug: "quran",
     title: "Quran",
     desc: "Improve recitation, Tajweed, pronunciation, fluency, and strengthen your connection with the Book of Allah.",
-    image: "/images/topics/quran-main.png",
+    image: "/images/topics/quran-main.webp",
     icon: BookOpen,
     badge: "PILLAR 01",
     imagePosition: "center center",
@@ -251,7 +244,7 @@ const learningPillars = [
     slug: "sunnah",
     title: "Sunnah",
     desc: "Learn daily duas, Islamic manners, respect, kindness, and beautiful character through the teachings of the Prophet ﷺ.",
-    image: "/images/topics/sunnah-main.png",
+    image: "/images/topics/sunnah-main.webp",
     icon: ScrollText,
     badge: "PILLAR 02",
     imagePosition: "55% center",
@@ -260,7 +253,7 @@ const learningPillars = [
     slug: "salah",
     title: "Salah",
     desc: "Understand wudu, prayer positions, daily prayers, short Surahs, and essential duas used inside Salah.",
-    image: "/images/topics/salah-main.png",
+    image: "/images/topics/salah-main.webp",
     icon: MoonStar,
     badge: "PILLAR 03",
     imagePosition: "58% center",
@@ -393,7 +386,9 @@ const learningPillars = [
 
   <div className="quran-model-safe relative flex h-[300px] w-full items-center justify-center overflow-hidden rounded-[30px] bg-black/20 sm:h-[360px] md:h-[440px] lg:h-[500px]">
     <div className="flex h-full w-full scale-[0.78] items-center justify-center sm:scale-[0.86] md:scale-[0.94] lg:scale-100">
-      <QuranModel />
+      <RenderWhenVisible className="h-[340px] sm:h-[420px] md:h-[500px] lg:h-[560px]" minimumHeight="0px" rootMargin="250px 0px" unmountWhenHidden>
+        <Suspense fallback={<div className="h-[340px] sm:h-[420px] md:h-[500px] lg:h-[560px]" />}><QuranModel /></Suspense>
+      </RenderWhenVisible>
     </div>
   </div>
 </div>
@@ -643,9 +638,14 @@ const learningPillars = [
           className="group relative min-h-[380px] overflow-hidden rounded-[38px] border border-white/10 bg-black shadow-[0_0_60px_rgba(0,0,0,0.50)] transition-all duration-700 hover:-translate-y-3 hover:border-yellow-400/60 hover:shadow-[0_0_85px_rgba(250,204,21,0.22)]"
         >
           {/* Main Image */}
-          <div
-            className="absolute inset-0 bg-cover bg-center transition-transform duration-[1200ms] group-hover:scale-110"
-            style={{ backgroundImage: `url(${program.image})` }}
+          <img
+            loading="lazy"
+            decoding="async"
+            src={program.image}
+            alt={program.title}
+            width={400}
+            height={500}
+            className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-[1200ms] group-hover:scale-110"
           />
 
           {/* Image readability overlays */}
@@ -810,9 +810,11 @@ const learningPillars = [
 
           {/* Image full visible */}
           <div className="relative z-10 overflow-hidden rounded-[36px] bg-black">
-            <img
-              src="/images/topics/salah-steps.png"
+            <img loading="lazy" decoding="async"
+              src="/images/topics/salah-steps.webp"
               alt="Steps of Salah"
+              width={1122}
+              height={1402}
               className="h-auto w-full rounded-[36px] object-contain shadow-[0_0_70px_rgba(0,0,0,0.85)]"
             />
           </div>
@@ -864,9 +866,15 @@ const learningPillars = [
             className="group relative min-h-[500px] overflow-hidden rounded-[48px] border border-yellow-400/25 bg-black shadow-[0_0_80px_rgba(0,0,0,0.58)] transition-all duration-700 hover:-translate-y-4 hover:border-yellow-400/70 hover:shadow-[0_0_110px_rgba(250,204,21,0.28)]"
           >
             {/* Full image */}
-            <div
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-[1400ms] group-hover:scale-110"
-              style={{ backgroundImage: `url(${pillar.image})` }}
+            <img
+              loading="lazy"
+              decoding="async"
+              src={pillar.image}
+              alt={pillar.title}
+              width={500}
+              height={600}
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1400ms] group-hover:scale-110"
+              style={{ objectPosition: pillar.imagePosition || "center" }}
             />
 
             {/* Dark overlays */}
@@ -1052,13 +1060,15 @@ const learningPillars = [
               {/* Mobile image */}
               <source
                 media="(max-width: 767px)"
-                srcSet="/images/topics/parent-trust-mobile.jpg"
+                srcSet="/images/topics/parent-trust-mobile.webp"
               />
 
               {/* Desktop / tablet image */}
-              <img
-                src="/images/topics/parent-trust-desktop.jpg"
+              <img loading="lazy" decoding="async"
+                src="/images/topics/parent-trust-desktop.webp"
                 alt="Trusted online Islamic learning"
+                width={1448}
+                height={1086}
                 className="h-auto w-full object-cover"
               />
             </picture>
@@ -1098,17 +1108,24 @@ const learningPillars = [
         learning plan through our 3-day free trial before confirming admission.
       </p>
     </div>
-    {/* <GlobalParentMapReviews /> */}
+
     
        {/* REVIEWS */}
-     <GlobalParentMapReviews />
+     <RenderWhenVisible minimumHeight="1050px" rootMargin="700px 0px">
+        <Suspense fallback={<section className="min-h-[1050px] bg-black" />}><GlobalParentMapReviews /></Suspense>
+      </RenderWhenVisible>
    {/* QURAN LEARNING PROMISE LAB */}
-        <QuranLearningPromise />
+        <RenderWhenVisible minimumHeight="900px" rootMargin="700px 0px">
+          <Suspense fallback={<div className="min-h-[900px] bg-black" />}><QuranLearningPromise /></Suspense>
+        </RenderWhenVisible>
 
       {/* FINAL CTA */}
-    <GlobalTrustGlobeCTA />
-    {/* <AdmissionMotionFlow /> */}
-    <AdmissionMotionFlow />
+    <RenderWhenVisible minimumHeight="900px" rootMargin="700px 0px">
+      <Suspense fallback={<div className="min-h-[900px] bg-black" />}><GlobalTrustGlobeCTA /></Suspense>
+    </RenderWhenVisible>
+    <RenderWhenVisible minimumHeight="750px" rootMargin="700px 0px">
+      <Suspense fallback={<div className="min-h-[750px] bg-black" />}><AdmissionMotionFlow /></Suspense>
+    </RenderWhenVisible>
   </div>
 </section>
     

@@ -5,7 +5,6 @@ import {
   MessageCircle,
   Quote,
   ShieldCheck,
-  Sparkles,
   Star,
   Users,
 } from "lucide-react";

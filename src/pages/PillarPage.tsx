@@ -28,7 +28,7 @@ const pillars: Record<string, Pillar> = {
   quran: {
     title: "Quran",
     subtitle: "Learn Quran Reading, Tajweed And Fluency",
-    mainImage: "/images/topics/quran-reading.png",
+    mainImage: "/images/topics/quran-reading.webp",
     icon: BookOpen,
     badge: "Quran Learning Program",
     intro:
@@ -47,7 +47,7 @@ const pillars: Record<string, Pillar> = {
   sunnah: {
     title: "Sunnah",
     subtitle: "Learn Daily Duas, Manners And Beautiful Character",
-    mainImage: "/images/topics/sunnah-main.png",
+    mainImage: "/images/topics/sunnah-main.webp",
     icon: ScrollText,
     badge: "Sunnah & Character Program",
     intro:
@@ -66,7 +66,7 @@ const pillars: Record<string, Pillar> = {
   salah: {
     title: "Salah",
     subtitle: "Learn Wudu, Prayer Positions And Duas Inside Salah",
-    mainImage: "/images/topics/salah-steps.png",
+    mainImage: "/images/topics/salah-steps.webp",
     icon: MoonStar,
     badge: "Salah Step By Step Program",
     intro:
@@ -179,7 +179,7 @@ export default function PillarPage() {
 
               <div className="relative overflow-hidden rounded-[52px] border border-yellow-400/30 bg-black/70 p-4 shadow-[0_0_120px_rgba(250,204,21,0.18)] backdrop-blur-2xl md:p-5">
                 <div className="relative overflow-hidden rounded-[40px] bg-black">
-                  <img
+                  <img decoding="async"
                     src={pillar.mainImage}
                     alt={pillar.title}
                     className="h-auto w-full rounded-[40px] object-contain shadow-[0_0_80px_rgba(0,0,0,0.85)]"

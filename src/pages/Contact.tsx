@@ -8,7 +8,6 @@ import {
   MessageCircle,
   Phone,
   ShieldCheck,
-  Sparkles,
   Star,
   UserPlus,
   Users,

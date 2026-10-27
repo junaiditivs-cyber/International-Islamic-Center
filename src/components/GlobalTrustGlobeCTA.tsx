@@ -7,10 +7,10 @@ import {
   MapPin,
   MessageCircle,
   ShieldCheck,
-  Sparkles,
   Users,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import useInViewport from "./useInViewport";
 
 const regions = [
   {
@@ -55,17 +55,20 @@ const trustCards = [
 export default function GlobalTrustGlobeCTA() {
   const [active, setActive] = useState(0);
   const activeRegion = regions[active];
+  const rootRef = useRef<HTMLElement | null>(null);
+  const inView = useInViewport(rootRef);
 
   useEffect(() => {
+    if (!inView) return;
     const timer = window.setInterval(() => {
       setActive((prev) => (prev + 1) % regions.length);
     }, 2200);
 
     return () => window.clearInterval(timer);
-  }, []);
+  }, [inView]);
 
   return (
-    <section className="relative overflow-x-hidden overflow-y-hidden bg-black px-4 py-20 text-white touch-pan-y sm:px-6 lg:py-32">
+    <section ref={rootRef} className="relative overflow-x-hidden overflow-y-hidden bg-black px-4 py-20 text-white touch-pan-y sm:px-6 lg:py-32">
       <div className="absolute inset-0 bg-black" />
 
       <div className="pointer-events-none absolute inset-0 opacity-[0.03] bg-[linear-gradient(to_right,#facc15_1px,transparent_1px),linear-gradient(to_bottom,#facc15_1px,transparent_1px)] bg-[size:78px_78px]" />

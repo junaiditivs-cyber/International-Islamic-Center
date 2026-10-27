@@ -87,7 +87,7 @@ export default function ProgramPage() {
             </div>
 
             <div className="relative">
-              <img
+              <img decoding="async"
                 src={program.image}
                 alt={program.title}
                 className="w-full rounded-[34px] border border-white/10 shadow-2xl object-cover max-h-[440px]"

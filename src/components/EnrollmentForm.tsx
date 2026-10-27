@@ -1,5 +1,4 @@
 import { useState, FormEvent } from 'react';
-import { motion } from 'motion/react';
 import { CheckCircle2, Info } from 'lucide-react';
 
 export default function EnrollmentForm() {
@@ -73,21 +72,16 @@ export default function EnrollmentForm() {
           </p>
         </div>
 
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+        <div
           className="bg-white rounded-[2rem] p-8 md:p-12 shadow-xl shadow-brand-900/5 border border-slate-100"
         >
           {submitted ? (
              <div className="text-center py-16">
-               <motion.div 
-                 initial={{ scale: 0 }} 
-                 animate={{ scale: 1 }} 
+               <div 
                  className="w-24 h-24 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-6"
                >
                  <CheckCircle2 className="w-12 h-12 text-brand-600" />
-               </motion.div>
+               </div>
                <h3 className="text-3xl font-bold text-slate-900 mb-4 font-serif">Alhamdulillah! Request Received</h3>
                <p className="text-slate-600 text-lg mb-8 max-w-md mx-auto">
                  We've received your enrollment details. Our team will contact you within <strong className="text-brand-600 font-semibold">2-4 hours</strong> to confirm your class schedule and begin your free trial.
@@ -152,7 +146,7 @@ export default function EnrollmentForm() {
 
             </form>
           )}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

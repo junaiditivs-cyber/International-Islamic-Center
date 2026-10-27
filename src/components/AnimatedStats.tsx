@@ -5,7 +5,6 @@ import {
   Clock,
   Globe,
   GraduationCap,
-  Sparkles,
   Users,
   type LucideIcon,
 } from "lucide-react";
@@ -208,9 +207,10 @@ export default function AnimatedStats() {
           </h2>
 
           <p className="mx-auto mt-5 max-w-3xl text-base leading-8 text-zinc-400 md:text-lg">
-            Our ISLAMIC CENTER supports students from different countries with flexible
-            online classes, qualified teachers and a calm Islamic learning
-            environment.
+            International Islamic Center is an online Quran academy for children and adults,
+            teaching Quran reading, Tajweed, Hifz and Islamic studies. It supports students
+            from different countries with flexible online classes, qualified teachers and a
+            calm Islamic learning environment.
           </p>
         </div>
 

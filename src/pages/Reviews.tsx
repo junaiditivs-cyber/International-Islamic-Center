@@ -3,7 +3,6 @@ import {
   Star,
   Quote,
   ExternalLink,
-  Sparkles,
   ShieldCheck,
   MessageSquare,
   CheckCircle2,

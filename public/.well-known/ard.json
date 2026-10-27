@@ -1,0 +1,18 @@
+{
+  "version": "1.0",
+  "entries": [
+    {
+      "identifier": "urn:air:international-islamic-center:education:quran-tutor",
+      "displayName": "International Islamic Center",
+      "description": "Online Quran, Tajweed, Hifz, and Islamic studies classes worldwide with flexible schedules and free trial classes.",
+      "type": "application/ai-catalog+json",
+      "url": "https://www.internationalislamiccenter.com",
+      "representativeQueries": [
+        "online quran classes",
+        "free quran trial",
+        "learn quran online",
+        "tajweed classes"
+      ]
+    }
+  ]
+}

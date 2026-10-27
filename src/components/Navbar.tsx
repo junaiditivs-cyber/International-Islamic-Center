@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import {
   BadgeCheck,
@@ -41,11 +42,16 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [coursesOpen, setCoursesOpen] = useState(false);
   const [mobileCoursesOpen, setMobileCoursesOpen] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const scrollBarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const navLinks: NavItem[] = [
     { name: "Home", path: "/", icon: Home },
@@ -125,22 +131,34 @@ const goBack = () => {
   }
 };
   useEffect(() => {
+    let frame = 0;
+    const updateScroll = () => {
+      const totalHeight = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      const progress = totalHeight ? Math.min(1, window.scrollY / totalHeight) : 0;
+      // Updating the bar directly avoids a full 500-line Navbar React render
+      // on every single scroll event.
+      if (scrollBarRef.current) {
+        scrollBarRef.current.style.transform = `scaleX(${progress})`;
+      }
+      const scrolled = window.scrollY > 18;
+      setIsScrolled((old) => old === scrolled ? old : scrolled);
+      frame = 0;
+    };
     const handleScroll = () => {
-      const totalHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
-
-      const progress =
-        totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0;
-
-      setScrollProgress(progress);
-      setIsScrolled(window.scrollY > 18);
+      if (!frame) frame = window.requestAnimationFrame(updateScroll);
     };
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    const timer = setTimeout(() => {
+      window.requestAnimationFrame(updateScroll);
+    }, 250);
 
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll, { passive: true });
     return () => {
+      clearTimeout(timer);
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+      if (frame) window.cancelAnimationFrame(frame);
     };
   }, []);
 
@@ -162,8 +180,9 @@ const goBack = () => {
 }, [isOpen]);
 
   return (
-    <header
-      className={`fixed left-0 right-0 top-0 z-[99999] transition-all duration-700 ${
+    <>
+      <header
+        className={`fixed left-0 right-0 top-0 z-[99999] transition-all duration-700 ${
         isScrolled
           ? "bg-black/[0.78] shadow-[0_24px_90px_rgba(0,0,0,0.72)] backdrop-blur-2xl"
           : "bg-black/[0.92] backdrop-blur-xl"
@@ -172,8 +191,8 @@ const goBack = () => {
       {/* Scroll progress */}
       <div className="absolute bottom-0 left-0 h-[2px] w-full bg-white/5">
         <div
-          className="h-full bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-600 shadow-[0_0_22px_rgba(250,204,21,0.85)] transition-[width] duration-150"
-          style={{ width: `${scrollProgress}%` }}
+          ref={scrollBarRef}
+          className="h-full w-full origin-left scale-x-0 bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-600 shadow-[0_0_22px_rgba(250,204,21,0.85)]"
         />
       </div>
 
@@ -366,179 +385,181 @@ const goBack = () => {
         {/* MOBILE BUTTON */}
         <button
           type="button"
-          onClick={() => setIsOpen((prev) => !prev)}
-          aria-label={isOpen ? "Close menu" : "Open menu"}
+          onClick={() => setIsOpen(true)}
+          aria-label="Open menu"
           aria-expanded={isOpen}
-          className="relative z-[100001] flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-yellow-400/25 bg-white/[0.06] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_12px_35px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-all duration-500 hover:bg-yellow-400/10 hover:text-yellow-300 xl:hidden"
+          className="relative z-10 flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-yellow-400/25 bg-white/[0.06] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_12px_35px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-all duration-500 hover:bg-yellow-400/10 hover:text-yellow-300 xl:hidden"
         >
           <span className="absolute inset-0 bg-gradient-to-br from-yellow-400/12 via-transparent to-transparent" />
-          {isOpen ? (
-            <X className="relative z-10 h-7 w-7" />
-          ) : (
-            <Menu className="relative z-10 h-7 w-7" />
-          )}
+          <Menu className="relative z-10 h-7 w-7" />
         </button>
       </nav>
+    </header>
 
-      {/* MOBILE MENU */}
-      <div
-        className={`fixed inset-0 z-[100000] bg-black text-white transition-all duration-700 xl:hidden ${
-          isOpen
-            ? "visible translate-x-0 opacity-100"
-            : "invisible translate-x-full opacity-0"
-        }`}
-      >
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(250,204,21,0.24),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(250,204,21,0.18),transparent_34%)]" />
-        <div className="pointer-events-none absolute inset-0 opacity-[0.06] bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:46px_46px]" />
-        <div className="pointer-events-none absolute left-1/2 top-20 h-72 w-72 -translate-x-1/2 rounded-full bg-yellow-400/12 blur-[120px]" />
-
-        <div className="relative z-10 flex h-[90px] items-center justify-between border-b border-yellow-400/20 bg-black/75 px-5 backdrop-blur-2xl">
-          <Link to="/" onClick={closeMenu} className="flex items-center gap-3">
-  <div className="flex h-13 w-13 items-center justify-center overflow-hidden rounded-2xl border border-yellow-400/35 bg-white shadow-[0_0_35px_rgba(250,204,21,0.45)]">
-    <img
-      src="/images/international-islamic-center-logo.jpg"
-      alt="International Islamic Center"
-      className="h-full w-full object-contain p-1"
-    />
-  </div>
-
-  <div>
-    <h1 className="text-[17px] font-black leading-tight tracking-wide">
-      <span className="text-white">INTERNATIONAL</span>
-      <span className="block text-yellow-400">ISLAMIC CENTER</span>
-    </h1>
-
-    <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.18em] text-yellow-400/70">
-      Knowledge | Unity | Service
-    </p>
-  </div>
-</Link>
-
-          <button
-            type="button"
-            onClick={closeMenu}
-            aria-label="Close menu"
-            className="flex h-12 w-12 items-center justify-center rounded-2xl border border-yellow-400/25 bg-white/[0.06] text-white transition-all hover:bg-yellow-400/10 hover:text-yellow-300"
+    {/* MOBILE MENU (SOLID PORTAL DRAWER) */}
+    {mounted && isOpen
+      ? createPortal(
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation Menu"
+            className="fixed inset-0 z-[9999999] flex flex-col text-white xl:hidden"
+            style={{ backgroundColor: "#050505" }}
           >
-            <X className="h-7 w-7" />
-          </button>
-        </div>
+            {/* Solid Top Header */}
+            <div className="relative z-10 flex h-[88px] shrink-0 items-center justify-between border-b border-yellow-400/25 bg-[#0a0a0a] px-5 shadow-2xl">
+              <Link to="/" onClick={closeMenu} className="flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-yellow-400/35 bg-white shadow-[0_0_25px_rgba(250,204,21,0.35)]">
+                  <img
+                    src="/images/international-islamic-center-logo-sm.webp"
+                    alt="International Islamic Center"
+                    width={48}
+                    height={48}
+                    className="h-full w-full object-contain p-1"
+                  />
+                </div>
 
-        <div className="relative z-10 h-[calc(100vh-90px)] overflow-y-auto px-5 pb-8 pt-7">
-          <div className="mb-6 rounded-[34px] border border-yellow-400/25 bg-white/[0.055] p-5 shadow-[0_0_60px_rgba(250,204,21,0.13)] backdrop-blur-xl">
-            <div className="mb-4 flex items-center justify-between gap-4">
-              <div className="flex items-center gap-3 text-yellow-300">
-                <Sparkles className="h-5 w-5" />
-                <p className="font-black">Premium Islamic Education</p>
-              </div>
+                <div>
+                  <div className="text-[16px] font-black leading-tight tracking-wide">
+                    <span className="text-white">INTERNATIONAL</span>{" "}
+                    <span className="text-yellow-400">ISLAMIC CENTER</span>
+                  </div>
 
-              <div className="flex items-center gap-1 rounded-full border border-yellow-400/25 bg-yellow-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-yellow-300">
-                <Star className="h-3 w-3" />
-                Elite
-              </div>
-            </div>
+                  <p className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.18em] text-yellow-400">
+                    Knowledge | Unity | Service
+                  </p>
+                </div>
+              </Link>
 
-            <p className="text-sm leading-relaxed text-zinc-300">
-              Learn Quran, Tajweed, Hifz, Salah, Duas and Islamic manners with
-              professional online teachers.
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            <NavLink
-              to="/"
-              onClick={closeMenu}
-              className={({ isActive }) =>
-                `flex w-full items-center justify-between rounded-2xl border px-5 py-4 text-lg font-black transition-all duration-300 ${
-                  isActive
-                    ? "border-yellow-400 bg-yellow-400 text-black"
-                    : "border-white/10 bg-white/[0.055] text-white"
-                }`
-              }
-            >
-              <span>Home</span>
-              <ChevronRight className="h-5 w-5" />
-            </NavLink>
-
-            <div className="rounded-[30px] border border-yellow-400/20 bg-yellow-400/10 p-4">
               <button
                 type="button"
-                onClick={() => setMobileCoursesOpen((prev) => !prev)}
-                className="mb-4 flex w-full items-center justify-between text-yellow-300"
+                onClick={closeMenu}
+                aria-label="Close menu"
+                className="flex h-12 w-12 items-center justify-center rounded-2xl border border-yellow-400/30 bg-white/[0.08] text-white transition-all hover:bg-yellow-400 hover:text-black active:scale-95"
               >
-                <span className="flex items-center gap-2 font-black">
-                  <BookOpen className="h-5 w-5" />
-                  Courses
-                </span>
-
-                <ChevronDown
-                  className={`h-5 w-5 transition-transform ${
-                    mobileCoursesOpen ? "rotate-180" : ""
-                  }`}
-                />
+                <X className="h-7 w-7" />
               </button>
-
-              {mobileCoursesOpen && (
-                <div className="grid grid-cols-1 gap-3">
-                  {courseLinks.map((course) => {
-                    const Icon = course.icon;
-
-                    return (
-                      <Link
-                        key={course.name}
-                        to={course.path}
-                        onClick={closeMenu}
-                        className="flex items-center gap-3 rounded-2xl border border-white/10 bg-black/35 p-4 transition hover:border-yellow-400/40"
-                      >
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-yellow-400 text-black">
-                          <Icon className="h-5 w-5" />
-                        </div>
-
-                        <div>
-                          <p className="font-black text-white">
-                            {course.name}
-                          </p>
-                          <p className="text-xs text-zinc-400">
-                            {course.desc}
-                          </p>
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              )}
             </div>
 
-            {navLinks.slice(1).map((link) => (
-              <NavLink
-                key={link.name}
-                to={link.path}
-                onClick={closeMenu}
-                className={({ isActive }) =>
-                  `flex w-full items-center justify-between rounded-2xl border px-5 py-4 text-lg font-black transition-all duration-300 ${
-                    isActive
-                      ? "border-yellow-400 bg-yellow-400 text-black"
-                      : "border-white/10 bg-white/[0.055] text-white"
-                  }`
-                }
-              >
-                <span>{link.name}</span>
-                <ChevronRight className="h-5 w-5" />
-              </NavLink>
-            ))}
-          </div>
+            {/* Solid Scrollable Content */}
+            <div className="relative z-10 flex-1 overflow-y-auto bg-[#050505] px-5 pb-12 pt-6">
+              <div className="mb-6 rounded-[28px] border border-yellow-400/25 bg-[#111111] p-5 shadow-[0_0_40px_rgba(0,0,0,0.8)]">
+                <div className="mb-3 flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3 text-yellow-300">
+                    <Sparkles className="h-5 w-5" />
+                    <p className="font-black">Premium Islamic Education</p>
+                  </div>
 
-          <Link
-            to="/trial"
-            onClick={closeMenu}
-            className="mt-7 flex w-full items-center justify-center gap-3 rounded-2xl bg-yellow-400 px-7 py-5 font-black text-black shadow-[0_0_50px_rgba(250,204,21,0.50)] transition hover:bg-yellow-300"
-          >
-            <GraduationCap className="h-5 w-5" />
-            Start Free Trial
-            <ChevronRight className="h-5 w-5" />
-          </Link>
-        </div>
-      </div>
-    </header>
+                  <div className="flex items-center gap-1 rounded-full border border-yellow-400/30 bg-yellow-400/15 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-yellow-300">
+                    <Star className="h-3 w-3" />
+                    Elite
+                  </div>
+                </div>
+
+                <p className="text-sm leading-relaxed text-zinc-300">
+                  Learn Quran, Tajweed, Hifz, Salah, Duas and Islamic manners with
+                  professional online teachers.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <NavLink
+                  to="/"
+                  onClick={closeMenu}
+                  className={({ isActive }) =>
+                    `flex w-full items-center justify-between rounded-2xl border px-5 py-4 text-base font-black transition-all duration-300 ${
+                      isActive
+                        ? "border-yellow-400 bg-yellow-400 text-black shadow-[0_0_25px_rgba(250,204,21,0.35)]"
+                        : "border-white/10 bg-[#121212] text-white hover:border-yellow-400/40"
+                    }`
+                  }
+                >
+                  <span>Home</span>
+                  <ChevronRight className="h-5 w-5" />
+                </NavLink>
+
+                <div className="rounded-[28px] border border-yellow-400/25 bg-[#0e0e0e] p-4">
+                  <button
+                    type="button"
+                    onClick={() => setMobileCoursesOpen((prev) => !prev)}
+                    className="flex w-full items-center justify-between text-yellow-300 py-1"
+                  >
+                    <span className="flex items-center gap-2 font-black">
+                      <BookOpen className="h-5 w-5" />
+                      Courses
+                    </span>
+
+                    <ChevronDown
+                      className={`h-5 w-5 transition-transform duration-300 ${
+                        mobileCoursesOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+
+                  {mobileCoursesOpen && (
+                    <div className="mt-3 grid grid-cols-1 gap-2.5">
+                      {courseLinks.map((course) => {
+                        const Icon = course.icon;
+
+                        return (
+                          <Link
+                            key={course.name}
+                            to={course.path}
+                            onClick={closeMenu}
+                            className="flex items-center gap-3.5 rounded-2xl border border-white/10 bg-[#181818] p-3.5 transition hover:border-yellow-400/50 hover:bg-[#202020]"
+                          >
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-yellow-400 text-black">
+                              <Icon className="h-5 w-5" />
+                            </div>
+
+                            <div>
+                              <p className="font-black text-white text-sm">
+                                {course.name}
+                              </p>
+                              <p className="text-xs text-zinc-400">
+                                {course.desc}
+                              </p>
+                            </div>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+
+                {navLinks.slice(1).map((link) => (
+                  <NavLink
+                    key={link.name}
+                    to={link.path}
+                    onClick={closeMenu}
+                    className={({ isActive }) =>
+                      `flex w-full items-center justify-between rounded-2xl border px-5 py-4 text-base font-black transition-all duration-300 ${
+                        isActive
+                          ? "border-yellow-400 bg-yellow-400 text-black shadow-[0_0_25px_rgba(250,204,21,0.35)]"
+                          : "border-white/10 bg-[#121212] text-white hover:border-yellow-400/40"
+                      }`
+                    }
+                  >
+                    <span>{link.name}</span>
+                    <ChevronRight className="h-5 w-5" />
+                  </NavLink>
+                ))}
+              </div>
+
+              <Link
+                to="/trial"
+                onClick={closeMenu}
+                className="mt-6 flex w-full items-center justify-center gap-2.5 rounded-2xl bg-yellow-400 px-7 py-4.5 font-black text-black shadow-[0_0_40px_rgba(250,204,21,0.45)] transition hover:bg-yellow-300 active:scale-98"
+              >
+                <GraduationCap className="h-5 w-5" />
+                Start Free Trial
+                <ChevronRight className="h-5 w-5" />
+              </Link>
+            </div>
+          </div>,
+          document.body
+        )
+      : null}
+    </>
   );
 }

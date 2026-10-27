@@ -1,8 +1,32 @@
-@import url("https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/outfit.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/amiri.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Outfit-Fallback';
+  src: local('Arial'), local('Helvetica Neue'), local('sans-serif');
+  ascent-override: 98%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+  size-adjust: 102%;
+}
+
 @theme {
-  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Outfit", "Outfit-Fallback", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Amiri", Georgia, Cambria, "Times New Roman", Times, serif;
 
   --color-brand-50: #fefce8;
@@ -699,4 +723,20 @@ html {
   .world-center-card span {
     font-size: 8px !important;
   }
+}
+/* GPU-friendly transforms instead of React rerenders on each scroll event. */
+.hadith-split { --hadith-move: 0%; --hadith-opacity: 1; }
+.hadith-half { opacity: var(--hadith-opacity); }
+.hadith-left { clip-path: inset(0 50% 0 0); transform: translateX(calc(-1 * var(--hadith-move))); }
+.hadith-right { clip-path: inset(0 0 0 50%); transform: translateX(var(--hadith-move)); }
+
+/* Respect visitors who request less animation and limit battery-intensive movement. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+  .hadith-half { transform: none !important; opacity: 1 !important; }
 }

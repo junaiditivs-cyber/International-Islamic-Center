@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import {
   Sparkles,
   Globe,
@@ -12,7 +12,10 @@ import {
   X,
 } from "lucide-react";
 import PhoneInput from "react-phone-input-2";
-import SuccessOverlay from "../components/SuccessOverlay";
+// @ts-ignore: no type declarations for CSS import
+import "react-phone-input-2/lib/style.css";
+
+const SuccessOverlay = lazy(() => import("../components/SuccessOverlay"));
 
 interface Student {
   id: number;
@@ -94,7 +97,7 @@ export default function Trial() {
   };
 
   return (
-    <div className="relative overflow-hidden min-h-screen bg-gradient-to-b from-black via-zinc-950 to-black text-white">
+    <main className="relative overflow-hidden min-h-screen bg-gradient-to-b from-black via-zinc-950 to-black text-white">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(250,204,21,0.18),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(250,204,21,0.12),transparent_35%)]" />
       <div className="pointer-events-none absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:80px_80px]" />
       <div className="pointer-events-none absolute top-[-160px] left-[-120px] w-[500px] h-[500px] bg-yellow-400/10 blur-[130px] rounded-full" />
@@ -103,7 +106,7 @@ export default function Trial() {
       <section className="relative z-10 max-w-7xl mx-auto px-6 pt-28 pb-24">
         <div className="grid lg:grid-cols-12 gap-10 items-start">
           <div className="lg:col-span-5">
-            <div className="sticky top-28">
+            <div className="lg:sticky lg:top-28">
               <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-yellow-400/10 border border-yellow-400/25 text-yellow-300 text-sm font-medium mb-8">
                 <Sparkles className="w-4 h-4" />
                 International Quran ISLAMIC CENTER
@@ -147,20 +150,20 @@ export default function Trial() {
                 ].map((item) => (
                   <div
                     key={item.title}
-                    className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 hover:border-yellow-400/30 hover:bg-yellow-400/5 transition-all"
+                    className="rounded-3xl border border-white/10 bg-white/[0.04] p-5 hover:border-yellow-400/30 hover:bg-yellow-400/5 transition-colors duration-200"
                   >
                     <item.icon className="text-yellow-400 w-8 h-8 mb-4" />
-                    <h3 className="font-black">{item.title}</h3>
-                    <p className="text-zinc-400 text-sm mt-1">{item.desc}</p>
+                    <h2 className="font-black text-lg">{item.title}</h2>
+                    <p className="text-zinc-300 text-sm mt-1">{item.desc}</p>
                   </div>
                 ))}
               </div>
 
               <div className="mt-9 rounded-3xl border border-yellow-400/20 bg-yellow-400/5 p-6">
-                <h3 className="text-yellow-400 font-black flex items-center gap-2">
+                <h2 className="text-yellow-400 font-black flex items-center gap-2 text-lg">
                   <Star size={18} />
                   Why Parents Trust Us
-                </h3>
+                </h2>
 
                 <ul className="mt-5 space-y-3 text-zinc-300 text-sm">
                   {[
@@ -199,38 +202,62 @@ export default function Trial() {
                     <span className="block text-yellow-400">Form</span>
                   </h2>
 
-                  <p className="mt-4 text-zinc-400">
+                  <p className="mt-4 text-zinc-300">
                     Phone number is required. Other details help us arrange the
                     best class timing for you.
                   </p>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-5 mb-6">
-                  <input
-                    type="text"
-                    placeholder="Father / Guardian Name"
-                    value={fatherName}
-                    onChange={(e) => setFatherName(e.target.value)}
-                    className="h-[56px] bg-white/5 border border-white/10 rounded-2xl px-5 text-white placeholder:text-zinc-500 outline-none focus:border-yellow-400"
-                  />
+                  <div>
+                    <label htmlFor="father-name" className="sr-only">
+                      Father or Guardian Name
+                    </label>
+                    <input
+                      id="father-name"
+                      name="fatherName"
+                      aria-label="Father or Guardian Name"
+                      type="text"
+                      placeholder="Father / Guardian Name"
+                      value={fatherName}
+                      onChange={(e) => setFatherName(e.target.value)}
+                      className="w-full h-[56px] bg-white/5 border border-white/10 rounded-2xl px-5 text-white placeholder:text-zinc-400 outline-none focus:border-yellow-400"
+                    />
+                  </div>
 
-                  <input
-                    type="email"
-                    placeholder="Parent Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="h-[56px] bg-white/5 border border-white/10 rounded-2xl px-5 text-white placeholder:text-zinc-500 outline-none focus:border-yellow-400"
-                  />
-
-                  <input
-                    type="text"
-                    placeholder="Country of Residence"
-                    value={countryResidence}
-                    onChange={(e) => setCountryResidence(e.target.value)}
-                    className="md:col-span-2 h-[56px] bg-white/5 border border-white/10 rounded-2xl px-5 text-white placeholder:text-zinc-500 outline-none focus:border-yellow-400"
-                  />
+                  <div>
+                    <label htmlFor="parent-email" className="sr-only">
+                      Parent Email
+                    </label>
+                    <input
+                      id="parent-email"
+                      name="parentEmail"
+                      aria-label="Parent Email"
+                      type="email"
+                      placeholder="Parent Email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full h-[56px] bg-white/5 border border-white/10 rounded-2xl px-5 text-white placeholder:text-zinc-400 outline-none focus:border-yellow-400"
+                    />
+                  </div>
 
                   <div className="md:col-span-2">
+                    <label htmlFor="country-residence" className="sr-only">
+                      Country of Residence
+                    </label>
+                    <input
+                      id="country-residence"
+                      name="countryResidence"
+                      aria-label="Country of Residence"
+                      type="text"
+                      placeholder="Country of Residence"
+                      value={countryResidence}
+                      onChange={(e) => setCountryResidence(e.target.value)}
+                      className="w-full h-[56px] bg-white/5 border border-white/10 rounded-2xl px-5 text-white placeholder:text-zinc-400 outline-none focus:border-yellow-400"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2 min-h-[56px]">
                     <PhoneInput
                       country="pk"
                       value={parentPhone}
@@ -238,7 +265,9 @@ export default function Trial() {
                       enableSearch
                       countryCodeEditable={false}
                       inputProps={{
+                        id: "parent-phone",
                         name: "parent-phone",
+                        "aria-label": "Parent Phone Number",
                         required: true,
                       }}
                       placeholder="Phone Number"
@@ -267,7 +296,7 @@ export default function Trial() {
                             <h3 className="text-2xl font-black">
                               Student {index + 1}
                             </h3>
-                            <p className="text-zinc-400 text-sm">
+                            <p className="text-zinc-300 text-sm">
                               Student learning information
                             </p>
                           </div>
@@ -277,7 +306,8 @@ export default function Trial() {
                           <button
                             type="button"
                             onClick={() => removeStudent(student.id)}
-                            className="w-11 h-11 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center hover:bg-red-500/20 transition-all"
+                            aria-label={`Remove Student ${index + 1}`}
+                            className="w-11 h-11 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center hover:bg-red-500/20 transition-colors duration-200"
                           >
                             <X className="w-5 h-5 text-red-400" />
                           </button>
@@ -285,68 +315,100 @@ export default function Trial() {
                       </div>
 
                       <div className="grid md:grid-cols-2 gap-5">
-                        <input
-                          type="text"
-                          placeholder="Student Full Name"
-                          value={student.studentName}
-                          onChange={(e) =>
-                            updateStudent(
-                              student.id,
-                              "studentName",
-                              e.target.value
-                            )
-                          }
-                          className="h-[56px] bg-white/5 border border-white/10 rounded-2xl px-5 text-white placeholder:text-zinc-500 outline-none focus:border-yellow-400"
-                        />
+                        <div>
+                          <label htmlFor={`student-name-${student.id}`} className="sr-only">
+                            Student Full Name
+                          </label>
+                          <input
+                            id={`student-name-${student.id}`}
+                            name={`studentName-${student.id}`}
+                            aria-label="Student Full Name"
+                            type="text"
+                            placeholder="Student Full Name"
+                            value={student.studentName}
+                            onChange={(e) =>
+                              updateStudent(
+                                student.id,
+                                "studentName",
+                                e.target.value
+                              )
+                            }
+                            className="w-full h-[56px] bg-white/5 border border-white/10 rounded-2xl px-5 text-white placeholder:text-zinc-400 outline-none focus:border-yellow-400"
+                          />
+                        </div>
 
-                        <input
-                          type="text"
-                          placeholder="Student Age"
-                          value={student.age}
-                          onChange={(e) =>
-                            updateStudent(student.id, "age", e.target.value)
-                          }
-                          className="h-[56px] bg-white/5 border border-white/10 rounded-2xl px-5 text-white placeholder:text-zinc-500 outline-none focus:border-yellow-400"
-                        />
+                        <div>
+                          <label htmlFor={`student-age-${student.id}`} className="sr-only">
+                            Student Age
+                          </label>
+                          <input
+                            id={`student-age-${student.id}`}
+                            name={`studentAge-${student.id}`}
+                            aria-label="Student Age"
+                            type="text"
+                            placeholder="Student Age"
+                            value={student.age}
+                            onChange={(e) =>
+                              updateStudent(student.id, "age", e.target.value)
+                            }
+                            className="w-full h-[56px] bg-white/5 border border-white/10 rounded-2xl px-5 text-white placeholder:text-zinc-400 outline-none focus:border-yellow-400"
+                          />
+                        </div>
 
-                        <select
-                          value={student.classDuration}
-                          onChange={(e) =>
-                            updateStudent(
-                              student.id,
-                              "classDuration",
-                              e.target.value
-                            )
-                          }
-                          className="h-[56px] bg-white/5 border border-white/10 rounded-2xl px-5 text-white outline-none focus:border-yellow-400"
-                        >
-                          <option value="" className="bg-black">
+                        <div>
+                          <label htmlFor={`class-duration-${student.id}`} className="sr-only">
                             Class Duration
-                          </option>
-                          <option value="30" className="bg-black">
-                            30 Min
-                          </option>
-                          <option value="45" className="bg-black">
-                            45 Min
-                          </option>
-                          <option value="60" className="bg-black">
-                            60 Min
-                          </option>
-                        </select>
+                          </label>
+                          <select
+                            id={`class-duration-${student.id}`}
+                            name={`classDuration-${student.id}`}
+                            aria-label="Class Duration"
+                            value={student.classDuration}
+                            onChange={(e) =>
+                              updateStudent(
+                                student.id,
+                                "classDuration",
+                                e.target.value
+                              )
+                            }
+                            className="w-full h-[56px] bg-white/5 border border-white/10 rounded-2xl px-5 text-white outline-none focus:border-yellow-400"
+                          >
+                            <option value="" className="bg-black">
+                              Class Duration
+                            </option>
+                            <option value="30" className="bg-black">
+                              30 Min
+                            </option>
+                            <option value="45" className="bg-black">
+                              45 Min
+                            </option>
+                            <option value="60" className="bg-black">
+                              60 Min
+                            </option>
+                          </select>
+                        </div>
 
-                        <input
-                          type="text"
-                          placeholder="Available From"
-                          value={student.availableFrom}
-                          onChange={(e) =>
-                            updateStudent(
-                              student.id,
-                              "availableFrom",
-                              e.target.value
-                            )
-                          }
-                          className="h-[56px] bg-white/5 border border-white/10 rounded-2xl px-5 text-white placeholder:text-zinc-500 outline-none focus:border-yellow-400"
-                        />
+                        <div>
+                          <label htmlFor={`available-from-${student.id}`} className="sr-only">
+                            Available From
+                          </label>
+                          <input
+                            id={`available-from-${student.id}`}
+                            name={`availableFrom-${student.id}`}
+                            aria-label="Available From"
+                            type="text"
+                            placeholder="Available From"
+                            value={student.availableFrom}
+                            onChange={(e) =>
+                              updateStudent(
+                                student.id,
+                                "availableFrom",
+                                e.target.value
+                              )
+                            }
+                            className="w-full h-[56px] bg-white/5 border border-white/10 rounded-2xl px-5 text-white placeholder:text-zinc-400 outline-none focus:border-yellow-400"
+                          />
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -355,23 +417,31 @@ export default function Trial() {
                 <button
                   type="button"
                   onClick={addStudent}
-                  className="w-full mt-7 py-4 rounded-2xl border border-yellow-400/25 bg-yellow-400/10 text-yellow-300 font-black flex items-center justify-center gap-3 hover:bg-yellow-400/15 transition-all"
+                  className="w-full mt-7 py-4 rounded-2xl border border-yellow-400/25 bg-yellow-400/10 text-yellow-300 font-black flex items-center justify-center gap-3 hover:bg-yellow-400/15 transition-colors duration-200"
                 >
                   <UserPlus className="w-5 h-5" />
                   Add Another Student
                 </button>
 
-                <textarea
-                  placeholder="Additional message or learning requirements..."
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  rows={5}
-                  className="mt-6 w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-zinc-500 resize-none outline-none focus:border-yellow-400"
-                />
+                <div>
+                  <label htmlFor="trial-message" className="sr-only">
+                    Additional message or learning requirements
+                  </label>
+                  <textarea
+                    id="trial-message"
+                    name="trialMessage"
+                    aria-label="Additional message or learning requirements"
+                    placeholder="Additional message or learning requirements..."
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    rows={5}
+                    className="mt-6 w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 text-white placeholder:text-zinc-400 resize-none outline-none focus:border-yellow-400"
+                  />
+                </div>
 
                 <button
                   type="submit"
-                  className="w-full mt-6 py-5 rounded-2xl bg-yellow-400 text-black font-black text-lg transition-all duration-300 hover:bg-yellow-300 hover:scale-[1.01] hover:shadow-[0_0_40px_rgba(250,204,21,0.45)]"
+                  className="w-full mt-6 py-5 rounded-2xl bg-yellow-400 text-black font-black text-lg transition-transform duration-200 hover:bg-yellow-300 hover:scale-[1.01] shadow-[0_0_40px_rgba(250,204,21,0.35)]"
                 >
                   Submit Registration
                 </button>
@@ -381,7 +451,11 @@ export default function Trial() {
         </div>
       </section>
 
-      {showSuccess && <SuccessOverlay type="trial" />}
-    </div>
+      {showSuccess && (
+        <Suspense fallback={null}>
+          <SuccessOverlay type="trial" />
+        </Suspense>
+      )}
+    </main>
   );
 }

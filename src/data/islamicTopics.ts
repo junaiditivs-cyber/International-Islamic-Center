@@ -14,7 +14,7 @@ export const islamicTopics = [
     slug: "quran-reading",
     title: "Quran Reading",
     subtitle: "Learn to read the Holy Quran with fluency and confidence.",
-    image: "/images/topics/quran-reading.jpg",
+    image: "/images/topics/quran-reading.webp",
     icon: BookOpen,
     ayah:
       "Indeed, this Quran guides to that which is most upright.",
@@ -33,7 +33,7 @@ export const islamicTopics = [
     slug: "tajweed",
     title: "Tajweed Rules",
     subtitle: "Improve your Quran recitation with Makharij and Tajweed.",
-    image: "/images/topics/tajweed.jpg",
+    image: "/images/topics/tajweed.webp",
     icon: Sparkles,
     ayah:
       "And recite the Quran with measured recitation.",
@@ -52,7 +52,7 @@ export const islamicTopics = [
     slug: "hifz-quran",
     title: "Hifz Quran",
     subtitle: "Memorize Quran with structure, revision and discipline.",
-    image: "/images/topics/hifz-quran.jpg",
+    image: "/images/topics/hifz-quran.webp",
     icon: BadgeCheck,
     ayah:
       "And We have certainly made the Quran easy for remembrance.",
@@ -71,7 +71,7 @@ export const islamicTopics = [
     slug: "how-to-perform-namaz",
     title: "How To Perform Namaz",
     subtitle: "Learn Salah step by step with correct positions and duas.",
-    image: "/images/topics/namaz.jpg",
+    image: "/images/topics/namaz.webp",
     icon: MoonStar,
     ayah:
       "Establish prayer for My remembrance.",
@@ -90,7 +90,7 @@ export const islamicTopics = [
     slug: "wudu",
     title: "Wudu",
     subtitle: "Learn cleanliness and the correct method of Wudu.",
-    image: "/images/topics/wudu.jpg",
+    image: "/images/topics/wudu.webp",
     icon: Droplets,
     ayah:
       "Indeed, Allah loves those who are constantly repentant and loves those who purify themselves.",
@@ -109,7 +109,7 @@ export const islamicTopics = [
     slug: "daily-duas",
     title: "Daily Duas",
     subtitle: "Memorize important duas for everyday life.",
-    image: "/images/topics/duas.jpg",
+    image: "/images/topics/duas.webp",
     icon: HandHeart,
     ayah:
       "Call upon Me; I will respond to you.",
@@ -128,7 +128,7 @@ export const islamicTopics = [
     slug: "islamic-manners",
     title: "Islamic Manners",
     subtitle: "Build good character with Adab, respect and kindness.",
-    image: "/images/topics/manners.jpg",
+    image: "/images/topics/manners.webp",
     icon: HeartHandshake,
     ayah:
       "And indeed, you are of a great moral character.",
@@ -147,7 +147,7 @@ export const islamicTopics = [
     slug: "islamic-studies",
     title: "Islamic Studies",
     subtitle: "Learn core Islamic knowledge in a simple and clear way.",
-    image: "/images/topics/islamic-studies.jpg",
+    image: "/images/topics/islamic-studies.webp",
     icon: ScrollText,
     ayah:
       "My Lord, increase me in knowledge.",

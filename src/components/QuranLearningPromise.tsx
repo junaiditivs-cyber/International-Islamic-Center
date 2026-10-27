@@ -8,7 +8,6 @@ import {
   GraduationCap,
   Languages,
   ShieldCheck,
-  Sparkles,
   UserCheck,
 } from "lucide-react";
 
