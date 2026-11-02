@@ -440,7 +440,7 @@ export default function FAQ() {
             ">
 
               <a
-                href="tel:+923431905776"
+                href="tel:+923295631797"
                 className="
                   flex
                   items-center
