@@ -17,6 +17,7 @@ import PhoneInput from "react-phone-input-2";
 // @ts-ignore: no type declarations for CSS import
 import "react-phone-input-2/lib/style.css";
 import SuccessOverlay from "../components/SuccessOverlay";
+import { sendWebhook } from "../config/webhook";
 
 interface Student {
   id: number;
@@ -70,12 +71,20 @@ export default function Contact() {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!parentPhone || parentPhone.trim().length < 5) {
       alert("Phone number is required!");
       return;
+    }
+
+    const params = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : null;
+    const utms: Record<string, string | null> = {};
+    if (params) {
+      ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"].forEach((param) => {
+        utms[param] = params.get(param);
+      });
     }
 
     const formData = {
@@ -85,9 +94,17 @@ export default function Contact() {
       parentPhone,
       students,
       message,
+      utms,
+      timestamp: new Date().toISOString(),
     };
 
     console.log("Contact Form Data:", formData);
+
+    await sendWebhook({
+      event: "contact_submission",
+      data: formData,
+      utms,
+    });
 
     setShowSuccess(true);
 

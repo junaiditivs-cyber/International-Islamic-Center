@@ -1,5 +1,6 @@
 import { useState, FormEvent } from 'react';
 import { CheckCircle2, Info } from 'lucide-react';
+import { sendWebhook } from '../config/webhook';
 
 export default function EnrollmentForm() {
   const [submitted, setSubmitted] = useState(false);
@@ -16,22 +17,12 @@ export default function EnrollmentForm() {
     const formData = new FormData(e.target as HTMLFormElement);
     const formValues = Object.fromEntries(formData.entries());
 
-    try {
-      await fetch('https://n8n.srv756914.hstgr.cloud/webhook-test/316db688-9adc-4aa8-9aff-48fbbec36d2b', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          event: 'enrollment_submission',
-          data: formValues,
-          utms,
-          timestamp: new Date().toISOString()
-        }),
-      });
-    } catch (error) {
-      console.error('Failed to send webhook:', error);
-    }
+    // Send data to production n8n webhook
+    await sendWebhook({
+      event: 'enrollment_submission',
+      data: formValues,
+      utms,
+    });
 
     // Send data to Email via FormSubmit
     try {
