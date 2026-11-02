@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { sendWebhook } from '../config/webhook';
+import { CONTACT_WHATSAPP } from '../config/contact';
 
 interface WhatsAppButtonProps {
   phoneNumber?: string;
@@ -8,7 +9,7 @@ interface WhatsAppButtonProps {
 }
 
 export default function WhatsAppButton({ 
-  phoneNumber = "+923295631797",
+  phoneNumber = CONTACT_WHATSAPP,
   defaultMessage = "Salam! I want to know about your classes and other details." 
 }: WhatsAppButtonProps) {
   const [utmString, setUtmString] = useState('');

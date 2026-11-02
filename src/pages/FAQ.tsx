@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CONTACT_PHONE_TEL } from "../config/contact";
 import {
   ChevronDown,
   MessageCircle,
@@ -440,7 +441,7 @@ export default function FAQ() {
             ">
 
               <a
-                href="tel:+923295631797"
+                href={`tel:${CONTACT_PHONE_TEL}`}
                 className="
                   flex
                   items-center

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import BrandLogo from "./BrandLogo";
 import { CREATOR_CREDIT } from "../config/brand";
+import { CONTACT_EMAIL, CONTACT_PHONE_TEL, CONTACT_PHONE_DISPLAY } from "../config/contact";
 
 export default function Footer() {
   const quickLinks = [
@@ -393,9 +394,12 @@ export default function Footer() {
                   </div>
                   <div>
                     <p className="text-sm font-black text-white">Email</p>
-                    <p className="mt-1 text-sm text-zinc-400">
-                      info@internationalislamiccenter.example.com
-                    </p>
+                    <a
+                      href={`mailto:${CONTACT_EMAIL}`}
+                      className="mt-1 block text-sm text-zinc-400 hover:text-yellow-400 transition-colors"
+                    >
+                      {CONTACT_EMAIL}
+                    </a>
                   </div>
                 </div>
 
@@ -404,10 +408,13 @@ export default function Footer() {
                     <Phone className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-sm font-black text-white">Phone</p>
-                    <p className="mt-1 text-sm text-zinc-400">
-                      +1 (234) 567-8900
-                    </p>
+                    <p className="text-sm font-black text-white">Phone / WhatsApp</p>
+                    <a
+                      href={`tel:${CONTACT_PHONE_TEL}`}
+                      className="mt-1 block text-sm text-zinc-400 hover:text-yellow-400 transition-colors"
+                    >
+                      {CONTACT_PHONE_DISPLAY}
+                    </a>
                   </div>
                 </div>
 

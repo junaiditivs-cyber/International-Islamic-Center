@@ -14,6 +14,7 @@ import PhoneInput from "react-phone-input-2";
 // @ts-ignore: no type declarations for CSS import
 import "react-phone-input-2/lib/style.css";
 import { sendWebhook } from "../config/webhook";
+import { CONTACT_EMAIL } from "../config/contact";
 
 const SuccessOverlay = lazy(() => import("../components/SuccessOverlay"));
 
@@ -107,7 +108,7 @@ export default function Trial() {
     });
 
     try {
-      await fetch("https://formsubmit.co/ajax/mustafauetnet@gmail.com", {
+      await fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

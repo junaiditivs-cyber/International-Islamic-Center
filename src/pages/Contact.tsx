@@ -18,6 +18,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import SuccessOverlay from "../components/SuccessOverlay";
 import { sendWebhook } from "../config/webhook";
+import { CONTACT_EMAIL, CONTACT_PHONE_TEL, CONTACT_PHONE_DISPLAY } from "../config/contact";
 
 interface Student {
   id: number;
@@ -197,19 +198,27 @@ export default function Contact() {
               </div>
 
               <div className="mt-6 grid gap-4">
-                <div className="flex items-center gap-4 rounded-2xl bg-white/[0.04] border border-white/10 p-4">
-                  <Phone className="w-6 h-6 text-yellow-400" />
-                  <span className="text-zinc-300">
-                    Phone / WhatsApp Support
-                  </span>
-                </div>
+                <a
+                  href={`tel:${CONTACT_PHONE_TEL}`}
+                  className="flex items-center gap-4 rounded-2xl bg-white/[0.04] border border-white/10 p-4 hover:border-yellow-400/40 hover:bg-yellow-400/5 transition-all group"
+                >
+                  <Phone className="w-6 h-6 text-yellow-400 group-hover:scale-110 transition-transform" />
+                  <div>
+                    <span className="block text-xs text-zinc-400">Phone / WhatsApp Support</span>
+                    <span className="text-white font-semibold text-sm sm:text-base">{CONTACT_PHONE_DISPLAY}</span>
+                  </div>
+                </a>
 
-                <div className="flex items-center gap-4 rounded-2xl bg-white/[0.04] border border-white/10 p-4">
-                  <Mail className="w-6 h-6 text-yellow-400" />
-                  <span className="text-zinc-300">
-                    Email Response Available
-                  </span>
-                </div>
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="flex items-center gap-4 rounded-2xl bg-white/[0.04] border border-white/10 p-4 hover:border-yellow-400/40 hover:bg-yellow-400/5 transition-all group"
+                >
+                  <Mail className="w-6 h-6 text-yellow-400 group-hover:scale-110 transition-transform" />
+                  <div>
+                    <span className="block text-xs text-zinc-400">Email Response Available</span>
+                    <span className="text-white font-semibold text-sm sm:text-base break-all">{CONTACT_EMAIL}</span>
+                  </div>
+                </a>
 
                 <div className="flex items-center gap-4 rounded-2xl bg-white/[0.04] border border-white/10 p-4">
                   <MapPin className="w-6 h-6 text-yellow-400" />

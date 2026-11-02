@@ -26,7 +26,7 @@ export default function EnrollmentForm() {
 
     // Send data to Email via FormSubmit
     try {
-      await fetch('https://formsubmit.co/ajax/mustafauetnet@gmail.com', {
+      await fetch('https://formsubmit.co/ajax/${CONTACT_EMAIL}', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
