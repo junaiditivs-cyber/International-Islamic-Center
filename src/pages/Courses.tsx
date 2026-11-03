@@ -1,537 +1,384 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
 import {
-  BookOpen,
-  Heart,
-  ScrollText,
-  Award,
+  Sparkles,
+  ArrowRight,
+  CheckCircle2,
+  CalendarCheck,
+  ShieldCheck,
   Clock3,
   Users,
-  Star,
-  ArrowRight,
-  Sparkles,
+  GraduationCap,
+  X,
 } from "lucide-react";
+import { programs, type Program } from "../data/programs";
 
-const courses = [
-  {
-    id: 1,
-    title: "Noorani Qaidah",
-    subtitle: "Foundation Course",
-    description:
-      "Build a strong Quranic foundation through Arabic letters, pronunciation, and basic Tajweed with interactive guided lessons.",
-    icon: BookOpen,
-    duration: "4 - 6 Weeks",
-    level: "Beginner",
-    age: "5+ Years",
-    features: [
-      "Letter Recognition",
-      "Makharij Practice",
-      "Basic Tajweed",
-      "Interactive Sessions",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1584260269785-5028448ebf37?auto=format&fit=crop&w=1200&q=80",
+// Additional metadata for courses display
+const courseMeta: Record<
+  string,
+  { duration: string; level: string; age: string }
+> = {
+  "quran-reading": {
+    duration: "2 - 4 Months",
+    level: "Beginner to Fluent",
+    age: "5+ Years & Adults",
   },
-
-  {
-    id: 2,
-    title: "Hifzul Quran",
-    subtitle: "Memorization Program",
-    description:
-      "A structured memorization journey designed with revision systems, retention techniques, and personal guidance.",
-    icon: Heart,
-    duration: "6 - 24 Months",
+  "tajweed-rules": {
+    duration: "3 - 6 Months",
     level: "All Levels",
-    age: "6+ Years",
-    features: [
-      "Daily Memorization",
-      "Smart Revision",
-      "Progress Tracking",
-      "1-on-1 Guidance",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80",
+    age: "6+ Years & Adults",
   },
-
-  {
-    id: 3,
-    title: "Tafsir & Translation",
-    subtitle: "Understanding the Quran",
-    description:
-      "Explore the meanings, context, wisdom, and practical guidance behind the verses of the Holy Quran.",
-    icon: ScrollText,
+  "hifz-quran": {
+    duration: "1 - 3 Years",
+    level: "Structured Hifz",
+    age: "6+ Years & Adults",
+  },
+  "how-to-perform-namaz": {
+    duration: "4 - 8 Weeks",
+    level: "Essential Fard",
+    age: "All Ages",
+  },
+  wudu: {
+    duration: "2 - 4 Weeks",
+    level: "Purification",
+    age: "All Ages",
+  },
+  "daily-duas": {
     duration: "Ongoing",
-    level: "Intermediate",
-    age: "10+ Years",
-    features: [
-      "Verse-by-Verse Study",
-      "Historical Context",
-      "Arabic Understanding",
-      "Life Applications",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1200&q=80",
+    level: "Sunnah Prayers",
+    age: "All Ages",
   },
-
-  {
-    id: 4,
-    title: "Tajweed Mastery",
-    subtitle: "Perfect Recitation",
-    description:
-      "Master advanced Tajweed rules and beautify your recitation exactly as the Quran was revealed.",
-    icon: Award,
-    duration: "8 - 12 Weeks",
-    level: "Advanced",
-    age: "8+ Years",
-    features: [
-      "Advanced Rules",
-      "Error Correction",
-      "Beautification",
-      "Voice Improvement",
-    ],
-    image:
-      "https://images.unsplash.com/photo-1516450360452-6b9a2c4c3e6e?auto=format&fit=crop&w=1200&q=80",
+  "akhlaq-adab": {
+    duration: "Ongoing",
+    level: "Character Building",
+    age: "Children & Teens",
   },
-];
+  "islamic-studies": {
+    duration: "Ongoing",
+    level: "Comprehensive",
+    age: "All Ages",
+  },
+};
 
 export default function Courses() {
-  const [selectedCourse, setSelectedCourse] = useState<any>(null);
+  const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
 
   return (
-    <div className="relative overflow-hidden min-h-screen bg-gradient-to-b from-black via-zinc-950 to-black text-white">
-
-      {/* BACKGROUND GLOW */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-yellow-400/10 blur-[140px] rounded-full" />
+    <main className="relative overflow-hidden min-h-screen bg-black text-white">
+      {/* Background radial glows */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(250,204,21,0.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(250,204,21,0.10),transparent_30%),linear-gradient(180deg,#000_0%,#070604_50%,#000_100%)]" />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.05] bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:80px_80px]" />
+      <div className="pointer-events-none absolute left-0 top-32 h-px w-full bg-gradient-to-r from-transparent via-yellow-400/35 to-transparent" />
 
       {/* HERO SECTION */}
-      <section className="relative z-10 pt-32 pb-24 px-6">
-        <div className="max-w-7xl mx-auto text-center">
-
-          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-yellow-400/10 border border-yellow-400/20 text-yellow-300 text-sm mb-8">
-            <Sparkles className="w-4 h-4" />
-            Premium Islamic Education
+      <section className="relative z-10 pt-32 pb-16 px-6">
+        <div className="max-w-5xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-yellow-400/10 border border-yellow-400/25 text-yellow-300 text-sm font-bold mb-8 shadow-[0_0_30px_rgba(250,204,21,0.15)] backdrop-blur-xl">
+            <Sparkles className="w-4 h-4 text-yellow-400" />
+            <span>Complete Islamic Curriculum</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-none">
-            Sacred Quran
-            <span className="block text-yellow-400 mt-2">
-              Learning Paths
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight leading-tight">
+            Explore Our
+            <span className="block bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-600 bg-clip-text text-transparent mt-2">
+              Premium Programs
             </span>
           </h1>
 
-          <p className="max-w-2xl mx-auto mt-8 text-zinc-400 text-lg leading-relaxed">
-            Experience beautifully structured Quran education with expert
-            teachers, personalized learning, and a spiritually uplifting
-            environment.
+          <p className="max-w-3xl mx-auto mt-6 text-zinc-300 text-base sm:text-lg leading-relaxed">
+            One-on-one online Islamic classes with certified male and female
+            teachers. Every course is tailored to the student&apos;s pace, age,
+            and goals with 24/7 flexible scheduling.
           </p>
+
+          {/* Quick value props */}
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4 text-xs sm:text-sm font-semibold text-zinc-300">
+            {[
+              "1-on-1 Personalized Attention",
+              "Male & Female Certified Tutors",
+              "24/7 Global Flexible Timings",
+              "100% Free 3-Day Trial",
+            ].map((prop) => (
+              <span
+                key={prop}
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 backdrop-blur-md"
+              >
+                <CheckCircle2 className="w-4 h-4 text-yellow-400" />
+                {prop}
+              </span>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* COURSES GRID */}
-      <section className="relative z-10 max-w-7xl mx-auto px-6 pb-24">
-
-        <div className="grid lg:grid-cols-2 gap-10">
-
-          {courses.map((course, index) => {
-            const Icon = course.icon;
+      <section className="relative z-10 max-w-[1500px] mx-auto px-6 pb-28">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7">
+          {programs.map((program, index) => {
+            const meta = courseMeta[program.slug] || {
+              duration: "Flexible",
+              level: "All Levels",
+              age: "All Ages",
+            };
 
             return (
-              <motion.div
-                key={course.id}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -12 }}
-                viewport={{ once: true }}
-                onClick={() => setSelectedCourse(course)}
-                className="
-                  group
-                  relative
-                  overflow-hidden
-                  rounded-[32px]
-                  bg-white/5
-                  backdrop-blur-xl
-                  border border-white/10
-                  hover:border-yellow-400/30
-                  transition-all
-                  duration-500
-                  cursor-pointer
-                  shadow-2xl
-                  hover:shadow-[0_0_60px_rgba(250,204,21,0.12)]
-                "
+              <div
+                key={program.slug}
+                className="group relative min-h-[420px] overflow-hidden rounded-[38px] border border-white/10 bg-black shadow-[0_0_60px_rgba(0,0,0,0.60)] transition-all duration-700 hover:-translate-y-3 hover:border-yellow-400/60 hover:shadow-[0_0_85px_rgba(250,204,21,0.25)] flex flex-col justify-between"
               >
+                {/* Main Program Image */}
+                <img
+                  loading="lazy"
+                  decoding="async"
+                  src={program.image}
+                  alt={program.title}
+                  width={400}
+                  height={500}
+                  className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-[1200ms] group-hover:scale-110"
+                />
 
-                {/* IMAGE */}
-                <div className="relative h-72 overflow-hidden">
+                {/* Readability Gradients */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-black/20" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/30" />
 
-                  <img decoding="async"
-                    src={course.image}
-                    alt={course.title}
-                    className="
-                      w-full
-                      h-full
-                      object-cover
-                      transition-transform
-                      duration-1000
-                      group-hover:scale-110
-                    "
-                  />
+                {/* Golden hover glow */}
+                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(250,204,21,0.28),transparent_45%)] opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
+                {/* Futuristic grid overlay */}
+                <div className="pointer-events-none absolute inset-0 opacity-[0.045] bg-[linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] bg-[size:42px_42px]" />
 
-                  {/* ICON */}
-                  <div className="absolute top-6 right-6">
-                    <div
-                      className="
-                        w-16
-                        h-16
-                        rounded-2xl
-                        bg-yellow-400/20
-                        border
-                        border-yellow-400/30
-                        backdrop-blur-xl
-                        flex
-                        items-center
-                        justify-center
-                        shadow-[0_0_30px_rgba(250,204,21,0.25)]
-                      "
-                    >
-                      <Icon className="w-8 h-8 text-yellow-300" />
-                    </div>
+                {/* Corner decorative frames */}
+                <div className="pointer-events-none absolute left-5 top-5 h-10 w-10 border-l border-t border-yellow-400/45 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                <div className="pointer-events-none absolute right-5 top-5 h-10 w-10 border-r border-t border-yellow-400/45 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                <div className="pointer-events-none absolute bottom-5 left-5 h-10 w-10 border-b border-l border-yellow-400/45 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                <div className="pointer-events-none absolute bottom-5 right-5 h-10 w-10 border-b border-r border-yellow-400/45 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+                {/* Top Badge: Course Number */}
+                <div className="relative z-10 flex items-center justify-between p-6">
+                  <div className="rounded-full border border-yellow-400/25 bg-black/70 px-4 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-yellow-300 backdrop-blur-xl">
+                    Course {String(index + 1).padStart(2, "0")}
                   </div>
 
-                  {/* LEVEL */}
-                  <div className="absolute left-6 bottom-6">
-                    <div className="px-4 py-2 rounded-full bg-black/50 backdrop-blur-xl border border-white/10 text-sm text-white">
-                      {course.level}
-                    </div>
-                  </div>
+                  <span className="rounded-full border border-white/10 bg-black/60 px-3 py-1 text-xs text-zinc-300 backdrop-blur-xl">
+                    {meta.level}
+                  </span>
                 </div>
 
-                {/* CONTENT */}
-                <div className="p-8">
+                {/* Bottom Content */}
+                <div className="relative z-10 p-7">
+                  <h2 className="text-2xl sm:text-3xl font-black leading-tight text-white drop-shadow-[0_4px_14px_rgba(0,0,0,0.95)]">
+                    {program.title}
+                  </h2>
 
-                  {/* TOP */}
-                  <div className="flex items-start justify-between mb-5">
-
-                    <div>
-                      <h2 className="
-                        text-3xl
-                        font-bold
-                        tracking-tight
-                        group-hover:text-yellow-300
-                        transition-colors
-                      ">
-                        {course.title}
-                      </h2>
-
-                      <p className="text-yellow-400 mt-1 font-medium">
-                        {course.subtitle}
-                      </p>
-                    </div>
-
-                    <div className="text-right">
-                      <p className="text-zinc-500 text-sm">
-                        Duration
-                      </p>
-
-                      <p className="font-semibold text-white">
-                        {course.duration}
-                      </p>
-                    </div>
-
-                  </div>
-
-                  {/* DESCRIPTION */}
-                  <p className="
-                    text-zinc-400
-                    leading-relaxed
-                    text-[15px]
-                    mb-6
-                  ">
-                    {course.description}
+                  <p className="mt-2 text-zinc-300 text-xs sm:text-sm line-clamp-2 leading-relaxed">
+                    {program.subtitle}
                   </p>
 
-                  {/* FEATURES */}
-                  <div className="flex flex-wrap gap-3 mb-8">
-
-                    {course.features.map((feature, i) => (
+                  {/* Highlights pills */}
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {program.highlights.slice(0, 2).map((item) => (
                       <span
-                        key={i}
-                        className="
-                          px-4
-                          py-2
-                          rounded-full
-                          bg-yellow-400/10
-                          border
-                          border-yellow-400/20
-                          text-yellow-300
-                          text-xs
-                          font-medium
-                        "
+                        key={item}
+                        className="rounded-lg bg-black/60 border border-white/10 px-2.5 py-1 text-[11px] text-zinc-300 backdrop-blur-md"
                       >
-                        {feature}
+                        ✓ {item}
                       </span>
                     ))}
-
                   </div>
 
-                  {/* STATS */}
-                  <div className="grid grid-cols-3 gap-4 mb-8">
+                  {/* Buttons */}
+                  <div className="mt-5 flex items-center gap-3">
+                    <Link
+                      to={program.link}
+                      className="flex-1 inline-flex items-center justify-center gap-2 rounded-2xl bg-yellow-400 text-black py-3 px-4 text-sm font-black transition-all duration-300 hover:bg-yellow-300 hover:shadow-[0_0_30px_rgba(250,204,21,0.4)]"
+                    >
+                      <span>Learn More</span>
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
 
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 text-center">
-                      <Clock3 className="w-6 h-6 text-yellow-400 mx-auto mb-2" />
-                      <p className="text-sm text-zinc-400">Duration</p>
-                      <p className="font-semibold mt-1">{course.duration}</p>
-                    </div>
-
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 text-center">
-                      <Users className="w-6 h-6 text-yellow-400 mx-auto mb-2" />
-                      <p className="text-sm text-zinc-400">Age</p>
-                      <p className="font-semibold mt-1">{course.age}</p>
-                    </div>
-
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 text-center">
-                      <Star className="w-6 h-6 text-yellow-400 mx-auto mb-2" />
-                      <p className="text-sm text-zinc-400">Level</p>
-                      <p className="font-semibold mt-1">{course.level}</p>
-                    </div>
-
+                    <button
+                      type="button"
+                      onClick={() => setSelectedProgram(program)}
+                      className="rounded-2xl border border-white/15 bg-white/10 p-3 text-white hover:bg-white/20 transition-colors"
+                      aria-label={`View syllabus for ${program.title}`}
+                      title="Quick Syllabus Overview"
+                    >
+                      <Sparkles className="w-4 h-4 text-yellow-400" />
+                    </button>
                   </div>
-
-                  {/* BUTTON */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedCourse(course);
-                    }}
-                    className="
-                      w-full
-                      py-4
-                      rounded-2xl
-                      bg-yellow-400
-                      text-black
-                      font-bold
-                      flex
-                      items-center
-                      justify-center
-                      gap-2
-                      transition-all
-                      duration-300
-                      hover:scale-[1.02]
-                      hover:shadow-[0_0_40px_rgba(250,204,21,0.45)]
-                      active:scale-95
-                    "
-                  >
-                    Explore Course
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
-
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
       </section>
 
-      {/* MODAL */}
+      {/* QUICK SYLLABUS MODAL */}
       <AnimatePresence>
-
-        {selectedCourse && (
-
-          <div className="fixed inset-0 z-[999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-
+        {selectedProgram && (
+          <div
+            className="fixed inset-0 z-[99999] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+            onClick={() => setSelectedProgram(null)}
+          >
             <motion.div
-              initial={{ opacity: 0, scale: 0.92 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.92 }}
-              transition={{ duration: 0.3 }}
-              className="
-                w-full
-                max-w-3xl
-                bg-zinc-950
-                border
-                border-white/10
-                rounded-[36px]
-                overflow-hidden
-                shadow-[0_0_80px_rgba(0,0,0,0.8)]
-              "
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.25 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-zinc-950 border border-yellow-400/20 rounded-[32px] sm:rounded-[38px] shadow-[0_0_90px_rgba(0,0,0,0.9)] p-6 sm:p-10"
             >
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setSelectedProgram(null)}
+                className="absolute top-6 right-6 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center text-white transition-colors"
+                aria-label="Close modal"
+              >
+                <X className="w-5 h-5" />
+              </button>
 
-              {/* IMAGE */}
-              <div className="relative h-80">
-
-                <img loading="lazy" decoding="async"
-                  src={selectedCourse.image}
-                  alt={selectedCourse.title}
-                  className="w-full h-full object-cover"
+              {/* Modal Header */}
+              <div className="flex items-center gap-4 mb-6">
+                <img
+                  src={selectedProgram.image}
+                  alt={selectedProgram.title}
+                  className="w-20 h-20 rounded-2xl object-cover border border-yellow-400/30"
                 />
-
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-
-                {/* CLOSE */}
-                <button
-                  onClick={() => setSelectedCourse(null)}
-                  className="
-                    absolute
-                    top-6
-                    right-6
-                    w-12
-                    h-12
-                    rounded-full
-                    bg-black/50
-                    backdrop-blur-xl
-                    border
-                    border-white/10
-                    text-white
-                    hover:bg-yellow-400
-                    hover:text-black
-                    transition-all
-                  "
-                >
-                  ✕
-                </button>
-
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-yellow-400/10 border border-yellow-400/20 text-yellow-300 text-xs font-bold mb-1">
+                    Featured Course
+                  </div>
+                  <h3 className="text-2xl sm:text-3xl font-black text-white">
+                    {selectedProgram.title}
+                  </h3>
+                  <p className="text-zinc-400 text-xs sm:text-sm">
+                    {selectedProgram.subtitle}
+                  </p>
+                </div>
               </div>
 
-              {/* CONTENT */}
-              <div className="p-10">
+              {/* Metadata strip */}
+              <div className="grid grid-cols-3 gap-3 mb-6 text-center">
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
+                  <Clock3 className="w-4 h-4 text-yellow-400 mx-auto mb-1" />
+                  <p className="text-[11px] text-zinc-400">Duration</p>
+                  <p className="text-xs font-bold text-white mt-0.5">
+                    {courseMeta[selectedProgram.slug]?.duration || "Flexible"}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
+                  <Users className="w-4 h-4 text-yellow-400 mx-auto mb-1" />
+                  <p className="text-[11px] text-zinc-400">Age Group</p>
+                  <p className="text-xs font-bold text-white mt-0.5">
+                    {courseMeta[selectedProgram.slug]?.age || "All Ages"}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-white/5 p-3">
+                  <GraduationCap className="w-4 h-4 text-yellow-400 mx-auto mb-1" />
+                  <p className="text-[11px] text-zinc-400">Level</p>
+                  <p className="text-xs font-bold text-white mt-0.5">
+                    {courseMeta[selectedProgram.slug]?.level || "All Levels"}
+                  </p>
+                </div>
+              </div>
 
-                <p className="text-yellow-400 font-medium mb-2">
-                  {selectedCourse.subtitle}
-                </p>
+              <p className="text-zinc-300 text-sm sm:text-base leading-relaxed mb-6">
+                {selectedProgram.description}
+              </p>
 
-                <h2 className="text-5xl font-black tracking-tight mb-6">
-                  {selectedCourse.title}
-                </h2>
-
-                <p className="text-zinc-400 leading-relaxed text-lg mb-10">
-                  {selectedCourse.description}
-                </p>
-
-                {/* INFO */}
-                <div className="grid grid-cols-3 gap-4 mb-10">
-
-                  <div className="bg-white/5 border border-white/10 rounded-2xl p-5 text-center">
-                    <Clock3 className="w-7 h-7 text-yellow-400 mx-auto mb-3" />
-                    <p className="text-zinc-500 text-sm">Duration</p>
-                    <p className="font-semibold mt-1">
-                      {selectedCourse.duration}
-                    </p>
-                  </div>
-
-                  <div className="bg-white/5 border border-white/10 rounded-2xl p-5 text-center">
-                    <Users className="w-7 h-7 text-yellow-400 mx-auto mb-3" />
-                    <p className="text-zinc-500 text-sm">Age Group</p>
-                    <p className="font-semibold mt-1">
-                      {selectedCourse.age}
-                    </p>
-                  </div>
-
-                  <div className="bg-white/5 border border-white/10 rounded-2xl p-5 text-center">
-                    <Star className="w-7 h-7 text-yellow-400 mx-auto mb-3" />
-                    <p className="text-zinc-500 text-sm">Level</p>
-                    <p className="font-semibold mt-1">
-                      {selectedCourse.level}
-                    </p>
-                  </div>
-
+              {/* Highlights & Lessons */}
+              <div className="grid sm:grid-cols-2 gap-6 mb-8">
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+                  <h4 className="text-yellow-400 font-bold text-sm mb-3 flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4" />
+                    Key Course Highlights
+                  </h4>
+                  <ul className="space-y-2 text-zinc-300 text-xs sm:text-sm">
+                    {selectedProgram.highlights.map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <span className="text-yellow-400 font-bold">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
-                {/* FEATURES */}
-                <div className="mb-10">
-
-                  <h3 className="text-2xl font-bold mb-6">
-                    What You'll Learn
-                  </h3>
-
-                  <div className="space-y-4">
-
-                    {selectedCourse.features.map(
-                      (feature: string, i: number) => (
-                        <div
-                          key={i}
-                          className="
-                            flex
-                            items-center
-                            gap-4
-                            bg-white/5
-                            border
-                            border-white/10
-                            rounded-2xl
-                            p-4
-                          "
-                        >
-                          <div className="
-                            w-8
-                            h-8
-                            rounded-full
-                            bg-yellow-400
-                            text-black
-                            flex
-                            items-center
-                            justify-center
-                            font-bold
-                          ">
-                            ✓
-                          </div>
-
-                          <p className="text-zinc-300">
-                            {feature}
-                          </p>
-                        </div>
-                      )
-                    )}
-
-                  </div>
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+                  <h4 className="text-yellow-400 font-bold text-sm mb-3 flex items-center gap-2">
+                    <GraduationCap className="w-4 h-4" />
+                    Lessons Covered
+                  </h4>
+                  <ul className="space-y-2 text-zinc-300 text-xs sm:text-sm">
+                    {selectedProgram.lessons.map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <span className="text-yellow-400 font-bold">•</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
+              </div>
 
-                {/* BUTTONS */}
-                <div className="flex flex-col md:flex-row gap-4">
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  to="/trial"
+                  className="flex-1 py-4 px-6 rounded-2xl bg-yellow-400 text-black font-black text-center text-sm sm:text-base hover:bg-yellow-300 transition-all shadow-[0_0_30px_rgba(250,204,21,0.35)]"
+                >
+                  Book 3-Day Free Trial
+                </Link>
 
-                  <button
-                    onClick={() =>
-                      (window.location.href = "/enroll")
-                    }
-                    className="
-                      flex-1
-                      py-4
-                      rounded-2xl
-                      bg-yellow-400
-                      text-black
-                      font-bold
-                      hover:shadow-[0_0_40px_rgba(250,204,21,0.45)]
-                      transition-all
-                    "
-                  >
-                    Enroll Now
-                  </button>
-
-                  <button
-                    onClick={() => setSelectedCourse(null)}
-                    className="
-                      flex-1
-                      py-4
-                      rounded-2xl
-                      border
-                      border-white/10
-                      bg-white/5
-                      text-white
-                      hover:bg-white/10
-                      transition-all
-                    "
-                  >
-                    Close
-                  </button>
-
-                </div>
-
+                <Link
+                  to={selectedProgram.link}
+                  className="flex-1 py-4 px-6 rounded-2xl border border-white/15 bg-white/5 text-white font-bold text-center text-sm sm:text-base hover:border-yellow-400/40 hover:bg-white/10 transition-all"
+                >
+                  View Full Course Syllabus →
+                </Link>
               </div>
             </motion.div>
           </div>
         )}
-
       </AnimatePresence>
-    </div>
+
+      {/* BOTTOM ENROLLMENT CTA SECTION */}
+      <section className="relative z-10 border-t border-white/10 bg-gradient-to-b from-black via-zinc-950 to-black px-6 py-20">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-yellow-400/10 border border-yellow-400/20 text-yellow-300 text-xs font-bold mb-4">
+            <ShieldCheck className="w-4 h-4" />
+            <span>100% Risk-Free Guarantee</span>
+          </div>
+
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+            Start Your Child&apos;s Quran Journey with a
+            <span className="block text-yellow-400 mt-2">
+              Free 3-Day Trial Class
+            </span>
+          </h2>
+
+          <p className="mt-4 text-zinc-400 text-sm sm:text-base max-w-xl mx-auto">
+            Experience our interactive one-on-one classes, meet your qualified teacher, and see the comfort of learning from home before paying anything.
+          </p>
+
+          <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+            <Link
+              to="/trial"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl bg-yellow-400 px-8 py-4 text-base font-black text-black hover:bg-yellow-300 transition-all shadow-[0_0_40px_rgba(250,204,21,0.4)]"
+            >
+              <CalendarCheck className="w-5 h-5" />
+              <span>Book Free Trial Now</span>
+            </Link>
+
+            <Link
+              to="/contact"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/5 px-8 py-4 text-base font-bold text-white hover:border-yellow-400/40 hover:bg-white/10 transition-all"
+            >
+              <span>Talk to Counselor</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
